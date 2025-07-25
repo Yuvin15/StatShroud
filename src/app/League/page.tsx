@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image'
+import MatchModal from '../components/MatchModal';
 
 export default function League() {
   
@@ -18,6 +19,9 @@ export default function League() {
   const [flexRank, setFlexRank] = useState('Gold II');
   const [matchHistory, setMatchHistory] = useState([]);
   const [hasPlayerData, setHasPlayerData] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMatchId, setSelectedMatchId] = useState<string>('');
 
   const handleSubmit = async () => {
 
@@ -71,6 +75,24 @@ export default function League() {
     }
   };
 
+  // Handle Enter key press in input
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  };
+
+  const openModal = (matchID: string) => {
+    setSelectedMatchId(matchID);
+    setIsModalOpen(true);
+    // Removed alert - let the modal handle display
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedMatchId('');
+  };
+
   return (
     <div className="min-h-screen py-8 ">
         <div className="max-w-4xl mx-auto px-4">
@@ -110,10 +132,11 @@ export default function League() {
                   placeholder="Username#Tag"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  onKeyDown={handleInputKeyDown}
                   className="border rounded-r-md p-2 flex-1 focus:outline-none focus:ring-2 focus:ring-black"
                   disabled={loading}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
                 />
+                
               </div>
 
               <button
@@ -144,6 +167,7 @@ export default function League() {
                   height={100}
                   unoptimized
                   alt='PlayerProfile'
+                  title='PlayerProfile'
                 />
                 <div className="space-y-2 content-center">
                   <p>
@@ -184,7 +208,6 @@ export default function League() {
                            </div>
                          </div>
                        </td>
-                     
                        <td className="p-4">
                          <div className="flex flex-col text-sm space-y-1">
                            <span>Lane: {match.lane}</span>
@@ -192,11 +215,10 @@ export default function League() {
                            <span>CS: {match.farm}</span>
                          </div>
                        </td>
-                     
                        <td className="p-4 text-right">
                          <button
                            className="px-4 py-2 bg-white text-black font-medium rounded-lg hover:bg-black hover:text-white transition" 
-                           onClick={() => alert('Clicked match ID: ' + match.matchID)}
+                           onClick={() => openModal(match.matchID)}
                          >
                            <p className="font-bold">See details</p>
                          </button>
@@ -218,6 +240,15 @@ export default function League() {
             </div>
           )}
         </div>
+        
+        {/* Render the modal */}
+        {isModalOpen && (
+          <MatchModal
+            matchId={selectedMatchId}
+            isOpen={isModalOpen}
+            onClose={closeModal}
+          />
+        )}
       </div>
   );
 }
