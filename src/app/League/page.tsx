@@ -75,17 +75,10 @@ export default function League() {
     }
   };
 
-  // Handle Enter key press in input
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSubmit();
-    }
-  };
 
   const openModal = (matchID: string) => {
     setSelectedMatchId(matchID);
     setIsModalOpen(true);
-    // Removed alert - let the modal handle display
   };
 
   const closeModal = () => {
@@ -132,7 +125,6 @@ export default function League() {
                   placeholder="Username#Tag"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  onKeyDown={handleInputKeyDown}
                   className="border rounded-r-md p-2 flex-1 focus:outline-none focus:ring-2 focus:ring-black"
                   disabled={loading}
                 />
@@ -148,7 +140,7 @@ export default function League() {
               </button>
             </div>
           </div>
-
+          
           {error && (
             <div className="flex justify-center mb-4">
               <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded max-w-md">
@@ -247,6 +239,7 @@ export default function League() {
             matchId={selectedMatchId}
             isOpen={isModalOpen}
             onClose={closeModal}
+            gameRegion={selectedRegion}
           />
         )}
       </div>

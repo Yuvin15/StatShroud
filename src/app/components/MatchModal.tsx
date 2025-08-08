@@ -1,33 +1,111 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 interface MatchModalProps {
   isOpen: boolean;
   onClose: () => void;
   matchId: any;
+  gameRegion: any;
 }
 
-const MatchModal = ({ isOpen, onClose, matchId }: MatchModalProps) => {
-  if (!isOpen) return null;
+interface PlayerItems {
+  item1: number;
+  item2: number;
+  item3: number;
+  item4: number;
+  item5: number;
+  item6: number;
+  ward: number;
+}
 
-  const [expanded, setExpanded] = useState({
-    blue1: false,
-    blue2: false,
-    blue3: false,
-    blue4: false,
-    blue5: false,
-    red1: false,
-    red2: false,
-    red3: false,
-    red4: false,
-    red5: false,
-  });
+interface Runes {
+  keyStone: string;
+  primaryRune1: string;
+  primaryRune2: string;
+  primaryRune3: string;
+  secondaryRune1: string;
+  secondaryRune2: string;
+  runeShard1: string;
+  runeShard2: string;
+  runeShard3: string;
+}
 
-  const toggleExpand = (key: keyof typeof expanded) => {
+interface Player {
+  playerName: string;
+  teamID: string;
+  championName: string;
+  laneName: string;
+  kda: string;
+  goldSpent: number;
+  goldEarned: number;
+  damage: number;
+  damageTaken: number;
+  towerDamage: number;
+  objDamage: number;
+  skillshotsHit: number;
+  skillshotsMissed: number;
+  farm: number;
+  healShield: number;
+  playerItems: PlayerItems;
+  summonerSpell1: string;
+  summonerSpell2: string;
+  runes: Runes;
+}
+
+const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) => {
+  const [GameID, setGameID] = useState("");
+  const [GameWinner, setGameWinner] = useState("Loading...");
+  const [GameMode, setGameMode] = useState("Loading...");
+  const [Players, setPlayers] = useState<Player[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+
+  // Fetch match data when modal opens
+  useEffect(() => {
+    const fetchMatchData = async () => {
+      if (!isOpen || !matchId || !gameRegion) return;
+      console.log("useEffect triggered:", { isOpen, matchId, gameRegion });
+      setLoading(true);
+      setError("");
+
+      try {
+        const response = await fetch(
+          `https://localhost:44365/Riot/GetSingleMatchDetailsForNormals?region=${gameRegion}&matchID=${matchId}`
+        );
+
+        if (!response.ok) throw new Error("Game not found");
+
+        const data = await response.json();
+        
+        console.log("gameID", data.gameID);
+        console.log("gameWinner", data.gameWinner);
+        console.log("gameMode", data.gameMode);
+        console.log("players", data.players);
+
+        setGameID(data.gameID);
+        setGameWinner(data.gameWinner);
+        setGameMode(data.gameMode);
+        setPlayers(data.players || []);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || "Failed to load data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMatchData();
+  }, [isOpen, matchId, gameRegion]);
+
+  const toggleExpand = (key: string) => {
     setExpanded((prev) => ({ ...prev, [key]: !prev[key] }));
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -44,838 +122,342 @@ const MatchModal = ({ isOpen, onClose, matchId }: MatchModalProps) => {
           </button>
         </div>
 
-        {/* Match ID */}
-        {matchId && (
-          <p className="mb-4 text-sm text-gray-400">Match ID: {matchId}</p>
+        {/* Loading/Error States */}
+        {loading && (
+          <div className="text-center py-4">
+            <p className="text-yellow-300">Loading match data...</p>
+          </div>
         )}
 
-        {/* Scoreboard */}
-        <div className="grid grid-cols-2 gap-4">
-          {/* Blue Side */}
-          <div>
-            <h3 className="text-blue-400 text-xl font-semibold mb-2">Blue Side</h3>
-
-            {/* Player Row - Blue 1 */}
-            <div className="bg-black rounded-lg p-3 mb-3 text-sm">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <Image
-                    src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/MissFortune.png"
-                    width={48}
-                    height={48}
-                    alt="Champion"
-                    unoptimized
-                    className="rounded"
-                  />
-                  <div>
-                    <p className="font-bold">KDA: 10 / 2 / 5</p>
-                    <p className="text-gray-300">Farm: 200 CS</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                </div>
-                <button
-                  onClick={() => toggleExpand("blue1")}
-                  className="text-white text-xl px-2"
-                >
-                  {expanded.blue1 ? "▲" : "▼"}
-                </button>
-              </div>
-
-              {expanded.blue1 && (
-                <div className="pt-3 border-t border-blue-900 text-gray-300 grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
-                  <p>Damage Dealt: 9,000</p>
-                  <p>Damage Taken: 1,200</p>
-                  <p>TurrentDamage: 2,000</p>
-                  <p>Objective Damage: 3,000</p>
-                  <p>Healing & Shielding: 1,000</p>
-                  <p>Skillshots Hit: 8</p>
-                  <p>Skillshots Missed: 7</p>
-                </div>
-              )}
-            </div>
-
-            <div className="bg-black rounded-lg p-3 mb-3 text-sm">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <Image
-                    src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/MissFortune.png"
-                    width={48}
-                    height={48}
-                    alt="Champion"
-                    unoptimized
-                    className="rounded"
-                  />
-                  <div>
-                    <p className="font-bold">KDA: 10 / 2 / 5</p>
-                    <p className="text-gray-300">Farm: 200 CS</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                </div>
-                <button
-                  onClick={() => toggleExpand("blue2")}
-                  className="text-white text-xl px-2"
-                >
-                  {expanded.blue2 ? "▲" : "▼"}
-                </button>
-              </div>
-
-              {expanded.blue2 && (
-                <div className="pt-3 border-t border-blue-900 text-gray-300 grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
-                  <p>Damage Dealt: 9,000</p>
-                  <p>Damage Taken: 1,200</p>
-                  <p>TurrentDamage: 2,000</p>
-                  <p>Objective Damage: 3,000</p>
-                  <p>Healing & Shielding: 1,000</p>
-                  <p>Skillshots Hit: 8</p>
-                  <p>Skillshots Missed: 7</p>
-                </div>
-              )}
-            </div>
-
-            <div className="bg-black rounded-lg p-3 mb-3 text-sm">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <Image
-                    src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/MissFortune.png"
-                    width={48}
-                    height={48}
-                    alt="Champion"
-                    unoptimized
-                    className="rounded"
-                  />
-                  <div>
-                    <p className="font-bold">KDA: 10 / 2 / 5</p>
-                    <p className="text-gray-300">Farm: 200 CS</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                </div>
-                <button
-                  onClick={() => toggleExpand("blue3")}
-                  className="text-white text-xl px-2"
-                >
-                  {expanded.blue3 ? "▲" : "▼"}
-                </button>
-              </div>
-
-              {expanded.blue3 && (
-                <div className="pt-3 border-t border-blue-900 text-gray-300 grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
-                  <p>Damage Dealt: 9,000</p>
-                  <p>Damage Taken: 1,200</p>
-                  <p>TurrentDamage: 2,000</p>
-                  <p>Objective Damage: 3,000</p>
-                  <p>Healing & Shielding: 1,000</p>
-                  <p>Skillshots Hit: 8</p>
-                  <p>Skillshots Missed: 7</p>
-                </div>
-              )}
-            </div>
-
-            <div className="bg-black rounded-lg p-3 mb-3 text-sm">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <Image
-                    src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/MissFortune.png"
-                    width={50}
-                    height={50}
-                    alt="Champion"
-                    unoptimized
-                    className="rounded"
-                  />
-                  <div>
-                    <p className="font-bold">KDA: 10 / 2 / 5</p>
-                    <p className="text-gray-300">Farm: 200 CS</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                </div>
-                <button
-                  onClick={() => toggleExpand("blue4")}
-                  className="text-white text-xl px-2"
-                >
-                  {expanded.blue4 ? "▲" : "▼"}
-                </button>
-              </div>
-
-              {expanded.blue4 && (
-                <div className="pt-3 border-t border-blue-900 text-gray-300 grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
-                  <p>Damage Dealt: 9,000</p>
-                  <p>Damage Taken: 1,200</p>
-                  <p>TurrentDamage: 2,000</p>
-                  <p>Objective Damage: 3,000</p>
-                  <p>Healing & Shielding: 1,000</p>
-                  <p>Skillshots Hit: 8</p>
-                  <p>Skillshots Missed: 7</p>
-                </div>
-              )}
-            </div>
-
-            <div className="bg-black rounded-lg p-3 mb-3 text-sm">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <Image
-                    src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/MissFortune.png"
-                    width={48}
-                    height={48}
-                    alt="Champion"
-                    unoptimized
-                    className="rounded"
-                  />
-                  <div>
-                    <p className="font-bold">KDA: 10 / 2 / 5</p>
-                    <p className="text-gray-300">Farm: 200 CS</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                  <Image
-                  src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                  width={28}
-                  height={28}
-                  alt="Item"
-                  unoptimized
-                  />
-                </div>
-                <button
-                  onClick={() => toggleExpand("blue5")}
-                  className="text-white text-xl px-2"
-                >
-                  {expanded.blue5 ? "▲" : "▼"}
-                </button>
-              </div>
-
-              {expanded.blue5 && (
-                <div className="pt-3 border-t border-blue-900 text-gray-300 grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
-                  <p>Damage Dealt: 9,000</p>
-                  <p>Damage Taken: 1,200</p>
-                  <p>TurrentDamage: 2,000</p>
-                  <p>Objective Damage: 3,000</p>
-                  <p>Healing & Shielding: 1,000</p>
-                  <p>Skillshots Hit: 8</p>
-                  <p>Skillshots Missed: 7</p>
-                </div>
-              )}
-            </div>
+        {error && (
+          <div className="text-center py-4">
+            <p className="text-red-400">Error: {error}</p>
           </div>
+        )}
 
-          {/* Red Side */}
-          <div>
-            <h3 className="text-red-400 text-xl font-semibold mb-2">Red Side</h3>
-
-            {/* Player Row - Red 1 */}
-            <div className="bg-black rounded-lg p-3 mb-3 text-sm">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <Image
-                    src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/Ahri.png"
-                    width={48}
-                    height={48}
-                    alt="Champion"
-                    unoptimized
-                    className="rounded"
-                  />
-                  <div>
-                    <p className="font-bold">KDA: 3 / 8 / 2</p>
-                    <p className="text-gray-300">Farm: 130 CS</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                </div>
-                <button
-                  onClick={() => toggleExpand("red1")}
-                  className="text-white text-xl px-2"
-                >
-                  {expanded.red1 ? "▲" : "▼"}
-                </button>
-              </div>
-
-              {expanded.red1 && (
-                <div className="pt-3 border-t border-red-900 text-gray-300 grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
-                  <p>Damage Dealt: 9,000</p>
-                  <p>Damage Taken: 1,200</p>
-                  <p>TurrentDamage: 2,000</p>
-                  <p>Objective Damage: 3,000</p>
-                  <p>Healing & Shielding: 1,000</p>
-                  <p>Skillshots Hit: 8</p>
-                  <p>Skillshots Missed: 7</p>
-                </div>
-              )}
-            </div>
-            <div className="bg-black rounded-lg p-3 mb-3 text-sm">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <Image
-                    src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/Ahri.png"
-                    width={48}
-                    height={48}
-                    alt="Champion"
-                    unoptimized
-                    className="rounded"
-                  />
-                  <div>
-                    <p className="font-bold">KDA: 3 / 8 / 2</p>
-                    <p className="text-gray-300">Farm: 130 CS</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                </div>
-                <button
-                  onClick={() => toggleExpand("red2")}
-                  className="text-white text-xl px-2"
-                >
-                  {expanded.red2 ? "▲" : "▼"}
-                </button>
-              </div>
-
-              {expanded.red2 && (
-                <div className="pt-3 border-t border-red-900 text-gray-300 grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
-                  <p>Damage Dealt: 9,000</p>
-                  <p>Damage Taken: 1,200</p>
-                  <p>TurrentDamage: 2,000</p>
-                  <p>Objective Damage: 3,000</p>
-                  <p>Healing & Shielding: 1,000</p>
-                  <p>Skillshots Hit: 8</p>
-                  <p>Skillshots Missed: 7</p>
-                </div>
-              )}
-            </div>
-
-            <div className="bg-black rounded-lg p-3 mb-3 text-sm">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <Image
-                    src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/Ahri.png"
-                    width={48}
-                    height={48}
-                    alt="Champion"
-                    unoptimized
-                    className="rounded"
-                  />
-                  <div>
-                    <p className="font-bold">KDA: 3 / 8 / 2</p>
-                    <p className="text-gray-300">Farm: 130 CS</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                </div>
-                <button
-                  onClick={() => toggleExpand("red3")}
-                  className="text-white text-xl px-2"
-                >
-                  {expanded.red3 ? "▲" : "▼"}
-                </button>
-              </div>
-
-              {expanded.red3 && (
-                <div className="pt-3 border-t border-red-900 text-gray-300 grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
-                  <p>Damage Dealt: 9,000</p>
-                  <p>Damage Taken: 1,200</p>
-                  <p>TurrentDamage: 2,000</p>
-                  <p>Objective Damage: 3,000</p>
-                  <p>Healing & Shielding: 1,000</p>
-                  <p>Skillshots Hit: 8</p>
-                  <p>Skillshots Missed: 7</p>
-                </div>
-              )}
-            </div>
-
-            <div className="bg-black rounded-lg p-3 mb-3 text-sm">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <Image
-                    src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/Ahri.png"
-                    width={48}
-                    height={48}
-                    alt="Champion"
-                    unoptimized
-                    className="rounded"
-                  />
-                  <div>
-                    <p className="font-bold">KDA: 3 / 8 / 2</p>
-                    <p className="text-gray-300">Farm: 130 CS</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                </div>
-                <button
-                  onClick={() => toggleExpand("red4")}
-                  className="text-white text-xl px-2"
-                >
-                  {expanded.red4 ? "▲" : "▼"}
-                </button>
-              </div>
-
-              {expanded.red4 && (
-                <div className="pt-3 border-t border-red-900 text-gray-300 grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
-                  <p>Damage Dealt: 9,000</p>
-                  <p>Damage Taken: 1,200</p>
-                  <p>TurrentDamage: 2,000</p>
-                  <p>Objective Damage: 3,000</p>
-                  <p>Healing & Shielding: 1,000</p>
-                  <p>Skillshots Hit: 8</p>
-                  <p>Skillshots Missed: 7</p>
-                </div>
-              )}
-            </div>
-
-            <div className="bg-black rounded-lg p-3 mb-3 text-sm">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <Image
-                    src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/Ahri.png"
-                    width={48}
-                    height={48}
-                    alt="Champion"
-                    unoptimized
-                    className="rounded"
-                  />
-                  <div>
-                    <p className="font-bold">KDA: 3 / 8 / 2</p>
-                    <p className="text-gray-300">Farm: 130 CS</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                  <Image
-                    src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png`}
-                    width={28}
-                    height={28}
-                    alt="Item"
-                    unoptimized
-                  />
-                </div>
-                <button
-                  onClick={() => toggleExpand("red5")}
-                  className="text-white text-xl px-2"
-                >
-                  {expanded.red5 ? "▲" : "▼"}
-                </button>
-              </div>
-
-              {expanded.red5 && (
-                <div className="pt-3 border-t border-red-900 text-gray-300 grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
-                  <p>Damage Dealt: 9,000</p>
-                  <p>Damage Taken: 1,200</p>
-                  <p>TurrentDamage: 2,000</p>
-                  <p>Objective Damage: 3,000</p>
-                  <p>Healing & Shielding: 1,000</p>
-                  <p>Skillshots Hit: 8</p>
-                  <p>Skillshots Missed: 7</p>
-                </div>
-              )}
-            </div>
-          </div>
+        {/* Match Info */}
+        <div className="mb-4">
+          {GameID && (
+            <p className="text-sm text-gray-400">Game ID: {GameID}</p>
+          )}
+          <p className="text-sm text-gray-400">Game Mode: {GameMode}</p>
+          <p className="text-sm text-gray-400">Winner: {GameWinner}</p>
         </div>
 
-        {/* Footer */}
-        <div className="flex justify-end mt-6">
-        </div>
+        {/* Scoreboard - Only show if we have players data */}
+        {Players.length > 0 && (() => {
+          // Filter players by team using teamID property
+          const blueTeam = Players.filter((player: Player) => 
+            player.teamID === "Blue Team"
+          );
+          
+          const redTeam = Players.filter((player: Player) => 
+            player.teamID === "Red Team"
+          );
+
+          return (
+            <div className="grid grid-cols-2 gap-4">
+              {/* Blue Side */}
+              <div>
+                <h3 className="text-blue-400 text-xl font-semibold mb-2">Blue Team</h3>
+                {blueTeam.map((player: Player, index: number) => (
+                  <div key={`blue-${player.playerName}-${index}`} className="bg-black rounded-lg p-3 mb-3 text-sm">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="relative">
+                          <Image
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/${player.championName}.png`}
+                            width={50}
+                            height={50}
+                            alt="Champion"
+                            unoptimized
+                            className="rounded"
+                          />
+                        </div>
+                        <div>
+                          <p className="font-bold text-blue-300">{player.playerName}</p>
+                          <p className="font-bold">{player.kda}</p>
+                          <p className="text-gray-300">{player.farm} CS</p>
+                        </div>
+                      </div>
+                      
+                      {/* Items */}
+                      <div className="flex items-center space-x-1">
+                        {[
+                          player.playerItems.item1,
+                          player.playerItems.item2,
+                          player.playerItems.item3,
+                          player.playerItems.item4,
+                          player.playerItems.item5,
+                          player.playerItems.item6
+                        ].map((itemId, itemIndex) => (
+                          <div key={itemIndex} className="w-7 h-7">
+                            {itemId && (
+                              <Image
+                                src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/${itemId}.png`}
+                                width={28}
+                                height={28}
+                                alt="Item"
+                                unoptimized
+                                className="rounded border border-gray-600"
+                              />
+                            )}
+                          </div>
+                        ))}
+                        
+                        {/* Ward */}
+                        <div className="w-7 h-7">
+                          {player.playerItems.ward && (
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/${player.playerItems.ward}.png`}
+                              width={28}
+                              height={28}
+                              alt="Ward"
+                              unoptimized
+                              className="rounded border border-yellow-500"
+                            />
+                          )}
+                        </div>
+                      </div>
+                      
+                      <button
+                        onClick={() => toggleExpand(`blue${player.playerName}${index}`)}
+                        className="text-white text-xl px-2"
+                      >
+                        {expanded[`blue${player.playerName}${index}`] ? "▲" : "▼"}
+                      </button>
+                    </div>
+
+                    {expanded[`blue${player.playerName}${index}`] && (
+                      <div className="pt-3 border-t border-blue-900 text-gray-300">
+                        
+                        {/* Runes Section */}
+                          <p className="text-blue-300 font-semibold mb-2">Summoner Runes and Summoner Spells</p>
+                          <div className="flex items-center space-x-2">
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/img/${player.runes.keyStone}`}
+                              width={24}
+                              height={24}
+                              alt="Keystone"
+                              unoptimized
+                              className="rounded border"
+                            />
+                            {[player.runes.primaryRune1, player.runes.primaryRune2, player.runes.primaryRune3].map((rune, runeIndex) => (
+                              <Image
+                                key={runeIndex}
+                                src={`https://ddragon.leagueoflegends.com/cdn/img/${rune}`}
+                                width={20}
+                                height={20}
+                                alt="Primary Rune"
+                                unoptimized
+                                className="rounded"
+                              />
+                            ))}
+                            {/* Secondary Runes */}
+                            {[player.runes.secondaryRune1, player.runes.secondaryRune2].map((rune, runeIndex) => (
+                              <Image
+                                key={runeIndex}
+                                src={`https://ddragon.leagueoflegends.com/cdn/img/${rune}`}
+                                width={20}
+                                height={20}
+                                alt="Secondary Rune"
+                                unoptimized
+                                className="rounded"
+                              />
+                            ))}
+                            {/* Summoner Spells */}
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/15.15.1/img/spell/${player.summonerSpell1}.png`}
+                              width={24}
+                              height={24}
+                              alt="Keystone"
+                              unoptimized
+                              className="rounded border"
+                            />
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/15.15.1/img/spell/${player.summonerSpell2}.png`}
+                              width={24}
+                              height={24}
+                              alt="Keystone"
+                              unoptimized
+                              className="rounded border"
+                            />
+                          </div>
+
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
+                          <p>Damage Dealt: {player.damage}</p>
+                          <p>Damage Taken: {player.damageTaken}</p>
+                          <p>Gold Earned: {player.goldEarned}</p>
+                          <p>Gold Spent: {player.goldSpent}</p>
+                          <p>Tower Damage: {player.towerDamage}</p>
+                          <p>Objective Damage: {player.objDamage}</p>
+                          <p>Skillshots Hit: {player.skillshotsHit}</p>
+                          <p>Skillshots Missed: {player.skillshotsMissed}</p>
+                          <p>Heal/Shield: {player.healShield}</p>
+                        </div>
+                        
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Red Side */}
+              <div>
+                <h3 className="text-red-400 text-xl font-semibold mb-2">Red Team</h3>
+                {redTeam.map((player: Player, index: number) => (
+                  <div key={`red-${player.playerName}-${index}`} className="bg-black rounded-lg p-3 mb-3 text-sm">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-4">
+                        <div className="relative">
+                          <Image
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/${player.championName}.png`}
+                            width={50}
+                            height={50}
+                            alt="Champion"
+                            unoptimized
+                            className="rounded"
+                          />
+                        </div>
+                        <div>
+                          <p className="font-bold text-red-300">{player.playerName}</p>
+                          <p className="font-bold">{player.kda}</p>
+                          <p className="font-bold">{player.farm} CS</p>
+                        </div>
+                      </div>
+                      
+                      {/* Items */}
+                      <div className="flex items-center space-x-1">
+                        {[
+                          player.playerItems.item1,
+                          player.playerItems.item2,
+                          player.playerItems.item3,
+                          player.playerItems.item4,
+                          player.playerItems.item5,
+                          player.playerItems.item6
+                        ].map((itemId, itemIndex) => (
+                          <div key={itemIndex} className="w-7 h-7">
+                            {itemId && (
+                              <Image
+                                src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/${itemId}.png`}
+                                width={28}
+                                height={28}
+                                alt="Item"
+                                unoptimized
+                                className="rounded border border-gray-600"
+                              />
+                            )}
+                          </div>
+                        ))}
+                        
+                        {/* Ward */}
+                        <div className="w-7 h-7">
+                          {player.playerItems.ward && (
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/${player.playerItems.ward}.png`}
+                              width={28}
+                              height={28}
+                              alt="Ward"
+                              unoptimized
+                              className="rounded border border-yellow-500"
+                            />
+                          )}
+                        </div>
+                      </div>
+                      
+                      <button
+                        onClick={() => toggleExpand(`red${player.playerName}${index}`)}
+                        className="text-white text-xl px-2"
+                      >
+                        {expanded[`red${player.playerName}${index}`] ? "▲" : "▼"}
+                      </button>
+                    </div>
+
+                    {expanded[`red${player.playerName}${index}`] && (
+                      <div className="pt-3 border-t border-red-900 text-gray-300">
+                        
+                        {/* Runes Section */}
+                          <p className="text-red-300 font-semibold mb-2">Runes:</p>
+
+                          <div className="flex items-center space-x-2">
+                            {/* Keystone */}
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/img/${player.runes.keyStone}`}
+                              width={24}
+                              height={24}
+                              alt="Keystone"
+                              unoptimized
+                              className="rounded border"
+                            />
+                            {/* Primary Runes */}
+                            {[player.runes.primaryRune1, player.runes.primaryRune2, player.runes.primaryRune3].map((rune, runeIndex) => (
+                              <Image
+                                key={runeIndex}
+                                src={`https://ddragon.leagueoflegends.com/cdn/img/${rune}`}
+                                width={20}
+                                height={20}
+                                alt="Primary Rune"
+                                unoptimized
+                                className="rounded"
+                              />
+                            ))}
+                            {/* Secondary Runes */}
+                            {[player.runes.secondaryRune1, player.runes.secondaryRune2].map((rune, runeIndex) => (
+                              <Image
+                                key={runeIndex}
+                                src={`https://ddragon.leagueoflegends.com/cdn/img/${rune}`}
+                                width={20}
+                                height={20}
+                                alt="Secondary Rune"
+                                unoptimized
+                                className="rounded"
+                              />
+                            ))}
+                            {/* Summoner Spells */}
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/15.15.1/img/spell/${player.summonerSpell1}.png`}
+                              width={24}
+                              height={24}
+                              alt="Keystone"
+                              unoptimized
+                              className="rounded border"
+                            />
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/15.15.1/img/spell/${player.summonerSpell2}.png`}
+                              width={24}
+                              height={24}
+                              alt="Keystone"
+                              unoptimized
+                              className="rounded border"
+                            />
+                          </div>
+                        <div className="grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
+                          <p>Damage Dealt: {player.damage}</p>
+                          <p>Damage Taken: {player.damageTaken}</p>
+                          <p>Gold Earned: {player.goldEarned}</p>
+                          <p>Gold Spent: {player.goldSpent}</p>
+                          <p>Tower Damage: {player.towerDamage}</p>
+                          <p>Objective Damage: {player.objDamage}</p>
+                          <p>Skillshots Hit: {player.skillshotsHit}</p>
+                          <p>Skillshots Missed: {player.skillshotsMissed}</p>
+                          <p>Heal/Shield: {player.healShield}</p>
+                        </div>
+                        
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Show placeholder if no data loaded yet */}
+        {!loading && !error && Players.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-gray-400">No match data available</p>
+          </div>
+        )}
       </div>
     </div>
   );
