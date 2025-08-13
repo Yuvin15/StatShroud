@@ -77,7 +77,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
           `https://localhost:44365/Riot/GetSingleMatchDetailsForNormals?region=${gameRegion}&matchID=${matchId}`
         );
 
-        if (!response.ok) throw new Error("Game not found");
+        if (!response.ok) throw new Error("Error loading data");
 
         const data = await response.json();
         
@@ -218,6 +218,27 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                             />
                           )}
                         </div>
+                        
+                        {/* summoner spells */}
+                        <div className="p-2">
+                          <Image
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.15.1/img/spell/${player.summonerSpell1}.png`}
+                            width={24}
+                            height={24}
+                            alt="Keystone"
+                            unoptimized
+                            className="rounded border"
+                          />
+                          <Image
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.15.1/img/spell/${player.summonerSpell2}.png`}
+                            width={24}
+                            height={24}
+                            alt="Keystone"
+                            unoptimized
+                            className="rounded border"
+                          />
+                        </div>
+                        
                       </div>
                       
                       <button
@@ -232,7 +253,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                       <div className="pt-3 border-t border-blue-900 text-gray-300">
                         
                         {/* Runes Section */}
-                          <p className="text-blue-300 font-semibold mb-2">Summoner Runes and Summoner Spells</p>
+                          <p className="text-blue-300 font-semibold mb-2">Summoner Runes</p>
                           <div className="flex items-center space-x-2">
                             <Image
                               src={`https://ddragon.leagueoflegends.com/cdn/img/${player.runes.keyStone}`}
@@ -265,7 +286,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                                 className="rounded"
                               />
                             ))}
-                            {/* Summoner Spells */}
+                            {/* Summoner Spells
                             <Image
                               src={`https://ddragon.leagueoflegends.com/cdn/15.15.1/img/spell/${player.summonerSpell1}.png`}
                               width={24}
@@ -281,11 +302,47 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                               alt="Keystone"
                               unoptimized
                               className="rounded border"
-                            />
+                            /> */}
                           </div>
 
-                        <div className="grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
-                          <p>Damage Dealt: {player.damage}</p>
+                        <div className="grid gap-x-6 gap-y-1 mt-2">
+
+                          <table>
+                            <tr>
+                              <td>
+                                Damage Dealt: {player.damage}
+                              </td>
+                              <td>
+                                Damage Taken: {player.damageTaken}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                Gold Earned: {player.goldEarned}
+                              </td>
+                              <td>
+                                Gold Spent: {player.goldSpent}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                Tower Damage: {player.towerDamage}
+                              </td>
+                              <td>
+                                Objective Damage: {player.objDamage}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                Skillshots Hit: {player.skillshotsHit}
+                              </td>
+                              <td>
+                                Skillshots Missed: {player.skillshotsMissed}
+                              </td>
+                            </tr>
+                          </table>
+
+                          {/* <p>Damage Dealt: {player.damage}</p>
                           <p>Damage Taken: {player.damageTaken}</p>
                           <p>Gold Earned: {player.goldEarned}</p>
                           <p>Gold Spent: {player.goldSpent}</p>
@@ -293,7 +350,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                           <p>Objective Damage: {player.objDamage}</p>
                           <p>Skillshots Hit: {player.skillshotsHit}</p>
                           <p>Skillshots Missed: {player.skillshotsMissed}</p>
-                          <p>Heal/Shield: {player.healShield}</p>
+                          <p>Heal/Shield: {player.healShield}</p> */}
                         </div>
                         
                       </div>
@@ -325,6 +382,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                           <p className="font-bold">{player.farm} CS</p>
                         </div>
                       </div>
+                      
                       
                       {/* Items */}
                       <div className="flex items-center space-x-1">
@@ -362,6 +420,25 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                               className="rounded border border-yellow-500"
                             />
                           )}
+                        </div>
+                        {/* summoner spells */}
+                        <div className="p-2">
+                          <Image
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.15.1/img/spell/${player.summonerSpell1}.png`}
+                            width={24}
+                            height={24}
+                            alt="Keystone"
+                            unoptimized
+                            className="rounded border"
+                          />
+                          <Image
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.15.1/img/spell/${player.summonerSpell2}.png`}
+                            width={24}
+                            height={24}
+                            alt="Keystone"
+                            unoptimized
+                            className="rounded border"
+                          />
                         </div>
                       </div>
                       
@@ -413,7 +490,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                                 className="rounded"
                               />
                             ))}
-                            {/* Summoner Spells */}
+                            {/* Summoner Spells
                             <Image
                               src={`https://ddragon.leagueoflegends.com/cdn/15.15.1/img/spell/${player.summonerSpell1}.png`}
                               width={24}
@@ -429,10 +506,44 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                               alt="Keystone"
                               unoptimized
                               className="rounded border"
-                            />
+                            /> */}
                           </div>
-                        <div className="grid grid-cols-2 gap-x-6 gap-y-1 mt-2">
-                          <p>Damage Dealt: {player.damage}</p>
+                        <div className="grid gap-x-6 gap-y-1 mt-2">
+                          <table>
+                            <tr>
+                              <td>
+                                Damage Dealt: {player.damage}
+                              </td>
+                              <td>
+                                Damage Taken: {player.damageTaken}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                Gold Earned: {player.goldEarned}
+                              </td>
+                              <td>
+                                Gold Spent: {player.goldSpent}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                Tower Damage: {player.towerDamage}
+                              </td>
+                              <td>
+                                Objective Damage: {player.objDamage}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                Skillshots Hit: {player.skillshotsHit}
+                              </td>
+                              <td>
+                                Skillshots Missed: {player.skillshotsMissed}
+                              </td>
+                            </tr>
+                          </table>
+                          {/* <p>Damage Dealt: {player.damage}</p>
                           <p>Damage Taken: {player.damageTaken}</p>
                           <p>Gold Earned: {player.goldEarned}</p>
                           <p>Gold Spent: {player.goldSpent}</p>
@@ -440,7 +551,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                           <p>Objective Damage: {player.objDamage}</p>
                           <p>Skillshots Hit: {player.skillshotsHit}</p>
                           <p>Skillshots Missed: {player.skillshotsMissed}</p>
-                          <p>Heal/Shield: {player.healShield}</p>
+                          <p>Heal/Shield: {player.healShield}</p> */}
                         </div>
                         
                       </div>
