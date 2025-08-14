@@ -80,11 +80,6 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
         if (!response.ok) throw new Error("Error loading data");
 
         const data = await response.json();
-        
-        console.log("gameID", data.gameID);
-        console.log("gameWinner", data.gameWinner);
-        console.log("gameMode", data.gameMode);
-        console.log("players", data.players);
 
         setGameID(data.gameID);
         setGameWinner(data.gameWinner);

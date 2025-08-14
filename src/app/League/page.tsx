@@ -15,10 +15,12 @@ export default function League() {
   const [summonerLevel, setSummonerLevel] = useState('Level');
   const [profileIconId, setProfileIconId] = useState(4567);
   const [ddData, setddVersion] = useState([]);
-  const [soloRank, setSoloRank] = useState('Gold II');
-  const [flexRank, setFlexRank] = useState('Gold II');
+  const [soloRank, setSoloRank] = useState('Unranked');
+  const [flexRank, setFlexRank] = useState('Unranked');
   const [matchHistory, setMatchHistory] = useState([]);
   const [hasPlayerData, setHasPlayerData] = useState(false);
+
+  const [topPlayed, setTopPlayed] = useState<any[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMatchId, setSelectedMatchId] = useState<string>('');
@@ -50,11 +52,13 @@ export default function League() {
       const ddData = await ddVersion.json();
 
       const response = await fetch(`https://localhost:44365/Riot/GetAccount?gameName=${inputGameName}&tagLine=${tagLine}&region=${apiRegion}`);
-      if (!response.ok) {
-        throw new Error('Player not found');
+      const topPlayedResponse = await fetch(`https://localhost:44365/Riot/GetTopPlayed?gameName=${inputGameName}&tagLine=${tagLine}&region=${apiRegion}`);
+      if (!response.ok && !topPlayedResponse.ok) {
+        throw new Error('Stats not found');
       }
       
       const data = await response.json();
+      const topPlayedData = await topPlayedResponse.json();
       setGameName(data.gameName);
       setSummonerLevel(data.summonerLevel);
       setProfileIconId(data.profileIconId);
@@ -63,9 +67,11 @@ export default function League() {
       setMatchHistory(data.basicMatchDetails);
       setddVersion(ddData[0]);
       
+      setTopPlayed(topPlayedData);
+      console.log(topPlayed);
+
       setHasPlayerData(true);
-      console.log(data);
-      
+
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
       setError(errorMessage);
@@ -173,9 +179,52 @@ export default function League() {
                     <span className="font-medium" id="FlexqID">Ranked Flex Queue:</span> {flexRank}
                   </p>
                 </div>
+
+                <div className="p-4 font-black">
+                  <h1>Top Played</h1>
+                  <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center justify-center w-full max-w-2xl">
+                    <span>
+                      2nd
+                      <Image
+                        src={`https://ddragon.leagueoflegends.com/cdn/${ddData}/img/champion/${topPlayed[1].championName}.png`}
+                        width={80}
+                        height={80}
+                        unoptimized
+                        alt={`${topPlayed[1].championName}`}
+                      />
+                      {topPlayed[1].championPoints}
+                    </span>
+                    <span>
+                      1st
+                      <Image
+                        src={`https://ddragon.leagueoflegends.com/cdn/${ddData}/img/champion/${topPlayed[0].championName}.png`}
+                        width={100}
+                        height={100}
+                        unoptimized
+                        alt={`${topPlayed[0].championName}`}
+                      />
+                      {topPlayed[0].championPoints}
+                    </span>
+                    <span>
+                      3rd
+                      <Image
+                        src={`https://ddragon.leagueoflegends.com/cdn/${ddData}/img/champion/${topPlayed[2].championName}.png`}
+                        width={60}
+                        height={60}
+                        unoptimized
+                        alt={`${topPlayed[2].championName}`}
+                      />
+                      {topPlayed[2].championPoints}
+                    </span>
+                  </div>
+                </div>
+
               </div>
 
-              <div className=''>
+              <div className="">
+                <p className="font-black text-center">
+                  Last 10 Games
+                </p>
                 <table className="w-full table-auto border-separate border-spacing-y-4" id='MatchHistoryTableID'>
                  <tbody>
                    {matchHistory.map((match: any, index: number) => (
@@ -202,7 +251,6 @@ export default function League() {
                        </td>
                        <td className="p-4">
                          <div className="flex flex-col text-sm space-y-1">
-                           <span>Lane: {match.lane}</span>
                            <span>KDA: {match.kda}</span>
                            <span>CS: {match.farm}</span>
                          </div>
