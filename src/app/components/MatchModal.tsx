@@ -47,6 +47,7 @@ interface Player {
   skillshotsHit: number;
   skillshotsMissed: number;
   farm: number;
+  visionScore: number;
   healShield: number;
   playerItems: PlayerItems;
   summonerSpell1: string;
@@ -167,6 +168,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                             alt="Champion"
                             unoptimized
                             className="rounded"
+                            title={player.championName}
                           />
                         </div>
                         <div>
@@ -201,7 +203,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                         ))}
                         
                         {/* Ward */}
-                        <div className="w-7 h-7">
+                        <div className="relative w-7 h-7">
                           {player.playerItems.ward && (
                             <Image
                               src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/${player.playerItems.ward}.png`}
@@ -212,6 +214,11 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                               className="rounded border border-yellow-500"
                             />
                           )}
+                          
+                          {/* Vision score overlay */}
+                          <span className="absolute bottom-0 right-0 bg-black/70 text-white px-1 rounded">
+                            {player.visionScore}
+                          </span>
                         </div>
                         
                         {/* summoner spells */}
@@ -257,6 +264,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                               alt="Keystone"
                               unoptimized
                               className="rounded border"
+                              title={player.runes.keyStone.substring(player.runes.keyStone.indexOf("perk") + 5, player.runes.keyStone.lastIndexOf("/"))}
                             />
                             {[player.runes.primaryRune1, player.runes.primaryRune2, player.runes.primaryRune3].map((rune, runeIndex) => (
                               <Image
@@ -267,6 +275,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                                 alt="Primary Rune"
                                 unoptimized
                                 className="rounded"
+                                title={rune.substring(rune.indexOf("perk") + 5, rune.lastIndexOf("/"))}
                               />
                             ))}
                             {/* Secondary Runes */}
@@ -279,6 +288,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                                 alt="Secondary Rune"
                                 unoptimized
                                 className="rounded"
+                                title={rune.substring(rune.indexOf("perk") + 5, rune.lastIndexOf("/"))}
                               />
                             ))}
                             {/* Summoner Spells
@@ -359,7 +369,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                 <h3 className="text-red-400 text-xl font-semibold mb-2">Red Team</h3>
                 {redTeam.map((player: Player, index: number) => (
                   <div key={`red-${player.playerName}-${index}`} className="bg-black rounded-lg p-3 mb-3 text-sm">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between ">
                       <div className="flex items-center space-x-4">
                         <div className="relative">
                           <Image
@@ -369,6 +379,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                             alt="Champion"
                             unoptimized
                             className="rounded"
+                            title={player.championName}
                           />
                         </div>
                         <div>
@@ -404,7 +415,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                         ))}
                         
                         {/* Ward */}
-                        <div className="w-7 h-7">
+                        <div className="relative w-7 h-7">
                           {player.playerItems.ward && (
                             <Image
                               src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/${player.playerItems.ward}.png`}
@@ -415,7 +426,13 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                               className="rounded border border-yellow-500"
                             />
                           )}
+                          
+                          {/* Vision score overlay */}
+                          <span className="absolute bottom-0 right-0 bg-black/70 text-white px-1 rounded">
+                            {player.visionScore}
+                          </span>
                         </div>
+
                         {/* summoner spells */}
                         <div className="p-2">
                           <Image
@@ -460,6 +477,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                               alt="Keystone"
                               unoptimized
                               className="rounded border"
+                              title={player.runes.keyStone.substring(player.runes.keyStone.indexOf("perk") + 5, player.runes.keyStone.lastIndexOf("/"))}
                             />
                             {/* Primary Runes */}
                             {[player.runes.primaryRune1, player.runes.primaryRune2, player.runes.primaryRune3].map((rune, runeIndex) => (
@@ -471,6 +489,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                                 alt="Primary Rune"
                                 unoptimized
                                 className="rounded"
+                                title={rune.substring(rune.indexOf("perk") + 5, rune.lastIndexOf("/"))}
                               />
                             ))}
                             {/* Secondary Runes */}
@@ -483,6 +502,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                                 alt="Secondary Rune"
                                 unoptimized
                                 className="rounded"
+                                title={rune.substring(rune.indexOf("perk") + 5, rune.lastIndexOf("/"))}
                               />
                             ))}
                             {/* Summoner Spells

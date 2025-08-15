@@ -191,6 +191,7 @@ export default function League() {
                         height={80}
                         unoptimized
                         alt={`${topPlayed[1].championName}`}
+                        title={topPlayed[1].championName}
                       />
                       {topPlayed[1].championPoints}
                     </span>
@@ -202,6 +203,7 @@ export default function League() {
                         height={100}
                         unoptimized
                         alt={`${topPlayed[0].championName}`}
+                        title={topPlayed[0].championName}
                       />
                       {topPlayed[0].championPoints}
                     </span>
@@ -213,6 +215,7 @@ export default function League() {
                         height={60}
                         unoptimized
                         alt={`${topPlayed[2].championName}`}
+                        title={topPlayed[2].championName}
                       />
                       {topPlayed[2].championPoints}
                     </span>
@@ -242,6 +245,7 @@ export default function League() {
                              height={100}
                              unoptimized
                              alt={match.championName}
+                            title={match.championName}
                            />
                            <div className="ml-4">
                              <p className="font-bold">{match.championName}</p>
