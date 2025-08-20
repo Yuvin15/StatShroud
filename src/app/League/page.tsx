@@ -173,10 +173,10 @@ export default function League() {
                     <span id="PlayerLevelID">Level {summonerLevel}</span>
                   </p>
                   <p>
-                    <span className="font-medium" id="SoloqID">Ranked Solo/Duo Queue:</span> {soloRank}
+                    <span className="font-bold" id="SoloqID">Ranked Solo/Duo Queue:</span> {soloRank}
                   </p>
                   <p>
-                    <span className="font-medium" id="FlexqID">Ranked Flex Queue:</span> {flexRank}
+                    <span className="font-bold" id="FlexqID">Ranked Flex Queue:</span> {flexRank}
                   </p>
                 </div>
 
@@ -234,7 +234,7 @@ export default function League() {
                      <tr
                        key={index}
                        className={`border-b border-black text-white ${
-                         match.gameWinner === 'Victory' ? 'bg-[#25b8f7]' : 'bg-[#b80000]'
+                         match.gameWinner == 'Victory' ? 'bg-[#25b8f7]' : 'bg-[#b80000]'
                        }`}
                      >
                        <td className="p-4">
