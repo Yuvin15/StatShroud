@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image'
 import MatchModal from '../components/MatchModal';
+import ArenaMatchModal from '../components/ArenaMatchModal'; 
 
 export default function League() {
   
@@ -100,6 +101,13 @@ export default function League() {
             <p className="">Search for player statistics and match history</p>
           </div>
           
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Open Arena Match Modal
+          </button>
+
           <div className="flex justify-center mb-8 text-black">
             <div className="flex flex-col gap-4 bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
               <h2 className="text-2xl font-bold text-center">Player Search</h2>
@@ -294,6 +302,11 @@ export default function League() {
             gameRegion={selectedRegion}
           />
         )}
+
+        {/* <ArenaMatchModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        /> */}
       </div>
   );
 }
