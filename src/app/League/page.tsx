@@ -24,6 +24,7 @@ export default function League() {
   const [topPlayed, setTopPlayed] = useState<any[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isArenaModalOpen, setArenaIsModalOpen] = useState(false);
   const [selectedMatchId, setSelectedMatchId] = useState<string>('');
 
   const handleSubmit = async () => {
@@ -83,9 +84,14 @@ export default function League() {
   };
 
 
-  const openModal = (matchID: string) => {
-    setSelectedMatchId(matchID);
-    setIsModalOpen(true);
+  const openModal = (matchID: string, gameMode: string) => {
+    if(gameMode === 'Arena') {
+      setSelectedMatchId(matchID);
+      setArenaIsModalOpen(true);
+    } else {
+      setSelectedMatchId(matchID);
+      setIsModalOpen(true);
+    }
   };
 
   const closeModal = () => {
@@ -101,12 +107,6 @@ export default function League() {
             <p className="">Search for player statistics and match history</p>
           </div>
           
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Open Arena Match Modal
-          </button>
 
           <div className="flex justify-center mb-8 text-black">
             <div className="flex flex-col gap-4 bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
@@ -268,12 +268,12 @@ export default function League() {
                          </div>
                        </td>
                        <td className="p-4 text-right">
-                         <button
-                           className="px-4 py-2 bg-white text-black font-medium rounded-lg hover:bg-black hover:text-white transition" 
-                           onClick={() => openModal(match.matchID)}
-                         >
-                           <p className="font-bold">See details</p>
-                         </button>
+                          <button
+                            className="px-4 py-2 bg-white text-black font-medium rounded-lg hover:bg-black hover:text-white transition" 
+                            onClick={() => openModal(match.matchID, match.gameMode)}
+                          >
+                            <p className="font-bold">See details</p>
+                          </button>
                        </td>
                      </tr>
                    ))}
@@ -303,10 +303,15 @@ export default function League() {
           />
         )}
 
-        {/* <ArenaMatchModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        /> */}
+        {/* Render the modal */}
+        {isArenaModalOpen && (
+          <ArenaMatchModal
+            matchId={selectedMatchId}
+            isOpen={isArenaModalOpen}
+            onClose={closeModal}
+            gameRegion={selectedRegion}
+          />
+        )}
       </div>
   );
 }

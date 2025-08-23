@@ -1,12 +1,13 @@
-// ArenaMatchModal.tsx
 "use client";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 interface ArenaMatchModalProps {
   isOpen: boolean;
   onClose: () => void;
+  matchId: any;
+  gameRegion: any;
 }
 
 interface PlayerItems {
@@ -20,19 +21,22 @@ interface PlayerItems {
 }
 
 interface Augments {
-  augments1 : number;
-  augments2 : number; 
-  augments3 : number; 
-  augments4 : number; 
-  augments5 : number; 
-  augments6 : number; 
+  keyStone: string;
+  primaryRune1: string;
+  primaryRune2: string;
+  primaryRune3: string;
+  secondaryRune1: string;
+  secondaryRune2: string;
+  runeShard1: string;
+  runeShard2: string;
+  runeShard3: string;
 }
 
 interface Player {
   playerName: string;
+  teamID: string;
   championName: string;
-  playerTeam: number;
-  playerTeamPosition: number;
+  laneName: string;
   kda: string;
   damage: number;
   damageTaken: number;
@@ -45,9 +49,47 @@ interface Player {
   augments: Augments;
 }
 
+const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchModalProps) => {
+  const [GameID, setGameID] = useState("");
+  const [GameWinner, setGameWinner] = useState("Loading...");
+  const [GameMode, setGameMode] = useState("Loading...");
+  const [Players, setPlayers] = useState<Player[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-const ArenaMatchModal: React.FC<ArenaMatchModalProps> = ({ isOpen, onClose }) => {
-  if (!isOpen) return null; // Don't render if not open
+  // Fetch match data when modal opens
+  useEffect(() => {
+    const fetchMatchData = async () => {
+      if (!isOpen || !matchId || !gameRegion) return;
+      console.log("useEffect triggered:", { isOpen, matchId, gameRegion });
+      setLoading(true);
+      setError("");
+
+      try {
+        const response = await fetch(
+          `https://localhost:44365/Riot/GetSingleMatchDetailsForArena?region=${gameRegion}&matchID=${matchId}`
+        );
+
+        if (!response.ok) throw new Error("Error loading data");
+
+        const data = await response.json();
+
+        setGameID(data.gameID);
+        setGameWinner(data.gameWinner);
+        setGameMode(data.gameMode);
+        setPlayers(data.players || []);
+      } catch (err: any) {
+        console.error(err);
+        setError(err.message || "Failed to load data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMatchData();
+  }, [isOpen, matchId, gameRegion]);
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
