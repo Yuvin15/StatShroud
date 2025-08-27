@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image'
 import MatchModal from '../components/MatchModal';
 import ArenaMatchModal from '../components/ArenaMatchModal'; 
+import Footer from '../components/Footer';
 
 export default function League() {
   
@@ -96,11 +97,12 @@ export default function League() {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setArenaIsModalOpen(false);
     setSelectedMatchId('');
   };
 
   return (
-    <div className="min-h-screen py-8 ">
+    <main className="min-h-screen ">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-2">League Stats Tracker</h1>
@@ -300,6 +302,7 @@ export default function League() {
             isOpen={isModalOpen}
             onClose={closeModal}
             gameRegion={selectedRegion}
+            ddVersion={ddData}
           />
         )}
 
@@ -310,8 +313,11 @@ export default function League() {
             isOpen={isArenaModalOpen}
             onClose={closeModal}
             gameRegion={selectedRegion}
+            ddVersion={ddData}
           />
         )}
-      </div>
+        <Footer />
+      </main>
+      
   );
 }

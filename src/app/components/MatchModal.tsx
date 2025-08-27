@@ -8,6 +8,7 @@ interface MatchModalProps {
   onClose: () => void;
   matchId: any;
   gameRegion: any;
+  ddVersion: any;
 }
 
 interface PlayerItems {
@@ -55,7 +56,7 @@ interface Player {
   runes: Runes;
 }
 
-const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) => {
+const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchModalProps) => {
   const [GameID, setGameID] = useState("");
   const [GameWinner, setGameWinner] = useState("Loading...");
   const [GameMode, setGameMode] = useState("Loading...");
@@ -69,7 +70,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
   useEffect(() => {
     const fetchMatchData = async () => {
       if (!isOpen || !matchId || !gameRegion) return;
-      console.log("useEffect triggered:", { isOpen, matchId, gameRegion });
+      console.log({ isOpen, matchId, gameRegion });
       setLoading(true);
       setError("");
 
@@ -162,7 +163,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                       <div className="flex items-center space-x-4">
                         <div className="relative">
                           <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/${player.championName}.png`}
+                            src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/${player.championName}.png`}
                             width={50}
                             height={50}
                             alt="Champion"
@@ -174,7 +175,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                         <div>
                           <p className="font-bold text-blue-300">{player.playerName}</p>
                           <p className="font-bold">{player.kda}</p>
-                          <p className="text-gray-300">{player.farm} CS</p>
+                          <p className="font-bold">{player.farm} CS</p>
                         </div>
                       </div>
                       
@@ -191,7 +192,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                           <div key={itemIndex} className="w-7 h-7 border border-blue-500 rounded">
                             {itemId && (
                               <Image
-                                src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/${itemId}.png`}
+                                src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/item/${itemId}.png`}
                                 width={28}
                                 height={28}
                                 alt="Item"
@@ -206,7 +207,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                         <div className="relative w-7 h-7">
                           {player.playerItems.ward && (
                             <Image
-                              src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/${player.playerItems.ward}.png`}
+                              src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/item/${player.playerItems.ward}.png`}
                               width={28}
                               height={28}
                               alt="Ward"
@@ -344,7 +345,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                       <div className="flex items-center space-x-4">
                         <div className="relative">
                           <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/${player.championName}.png`}
+                            src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/${player.championName}.png`}
                             width={50}
                             height={50}
                             alt="Champion"
@@ -374,7 +375,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                           <div key={itemIndex} className="w-7 h-7 border border-red-500 rounded">
                             {itemId && (
                               <Image
-                                src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/${itemId}.png`}
+                                src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/item/${itemId}.png`}
                                 width={28}
                                 height={28}
                                 alt="Item"
@@ -389,7 +390,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion }: MatchModalProps) =
                         <div className="relative w-7 h-7">
                           {player.playerItems.ward && (
                             <Image
-                              src={`https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/${player.playerItems.ward}.png`}
+                              src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/item/${player.playerItems.ward}.png`}
                               width={28}
                               height={28}
                               alt="Ward"

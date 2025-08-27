@@ -8,6 +8,7 @@ interface ArenaMatchModalProps {
   onClose: () => void;
   matchId: any;
   gameRegion: any;
+  ddVersion: any;
 }
 
 interface PlayerItems {
@@ -34,7 +35,8 @@ interface Augments {
 
 interface Player {
   playerName: string;
-  teamID: string;
+  PlayerTeamPosition: number;
+  PlayerTeamName: string;
   championName: string;
   laneName: string;
   kda: string;
@@ -49,7 +51,7 @@ interface Player {
   augments: Augments;
 }
 
-const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchModalProps) => {
+const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: ArenaMatchModalProps) => {
   const [GameID, setGameID] = useState("");
   const [GameWinner, setGameWinner] = useState("Loading...");
   const [GameMode, setGameMode] = useState("Loading...");
@@ -57,7 +59,6 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchMod
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch match data when modal opens
   useEffect(() => {
     const fetchMatchData = async () => {
       if (!isOpen || !matchId || !gameRegion) return;
@@ -98,7 +99,7 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchMod
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl md:text-2xl font-bold text-yellow-300">Match Details</h2>
           <button
-            onClick={onClose}
+            onClick={ onClose } 
             className="text-gray-400 hover:text-red-500 text-3xl leading-none"
             aria-label="Close"
           >
@@ -107,8 +108,9 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchMod
         </div>
 
         <div className="mb-6">
-          <p className="text-sm text-gray-400">Game ID: 10</p>
-          <p className="text-sm text-gray-400">Game Mode: Arena</p>
+          <p className="text-sm text-gray-400">Game ID: {GameID}</p>
+          <p className="text-sm text-gray-400">Game Mode: {GameMode}</p>
+          <p className="text-sm text-gray-400">Winning Team: {GameWinner}</p>
         </div>
       
         {/* Teams Container - Display 4 matches (8 teams total) */}
@@ -123,7 +125,7 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchMod
                   {/* Player 1 */}
                   <div className="flex flex-col items-center">
                     <Image
-                      src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/Yunara.png"
+                      src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/Yunara.png`}
                       alt={`Team ${matchIndex * 2 + 1} Player 1`}
                       width={50}
                       height={50}
@@ -135,7 +137,7 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchMod
                       {[...Array(6)].map((_, i) => (
                         <Image
                           key={i}
-                          src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png"
+                          src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/item/1001.png`}
                           alt={`Team ${matchIndex * 2 + 1} Player 1 Item ${i + 1}`}
                           width={24}
                           height={24}
@@ -149,7 +151,7 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchMod
                   {/* Player 2 */}
                   <div className="flex flex-col items-center">
                     <Image
-                      src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/Yunara.png"
+                      src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/Yunara.png`}
                       alt={`Team ${matchIndex * 2 + 1} Player 2`}
                       width={50}
                       height={50}
@@ -161,7 +163,7 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchMod
                       {[...Array(6)].map((_, i) => (
                         <Image
                           key={i}
-                          src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png"
+                          src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/item/1001.png`}
                           alt={`Team ${matchIndex * 2 + 1} Player 2 Item ${i + 1}`}
                           width={24}
                           height={24}
@@ -181,7 +183,7 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchMod
                   {/* Player 1 */}
                   <div className="flex flex-col items-center">
                     <Image
-                      src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/Yunara.png"
+                      src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/Yunara.png`}
                       alt={`Team ${matchIndex * 2 + 2} Player 1`}
                       width={50}
                       height={50}
@@ -193,7 +195,7 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchMod
                       {[...Array(6)].map((_, i) => (
                         <Image
                           key={i}
-                          src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png"
+                          src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/item/1001.png`}
                           alt={`Team ${matchIndex * 2 + 2} Player 1 Item ${i + 1}`}
                           width={24}
                           height={24}
@@ -207,7 +209,7 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchMod
                   {/* Player 2 */}
                   <div className="flex flex-col items-center">
                     <Image
-                      src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/champion/Yunara.png"
+                      src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/Yunara.png`}
                       alt={`Team ${matchIndex * 2 + 2} Player 2`}
                       width={50}
                       height={50}
@@ -219,7 +221,7 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion }: ArenaMatchMod
                       {[...Array(6)].map((_, i) => (
                         <Image
                           key={i}
-                          src="https://ddragon.leagueoflegends.com/cdn/15.14.1/img/item/1001.png"
+                          src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/Yunara.png`}
                           alt={`Team ${matchIndex * 2 + 2} Player 2 Item ${i + 1}`}
                           width={24}
                           height={24}
