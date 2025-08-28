@@ -240,7 +240,7 @@ const openChampionModel = (championName: string) => {
                                     height={120}
                                     className="mx-auto group-hover:scale-110 transition-transform duration-300"
                                     unoptimized
-                                    onClick={() =>openChampionModel(champion.name)}
+                                    onClick={() =>openChampionModel(champion.image)}
                                 />
                             </div>
                         </div>
@@ -253,7 +253,7 @@ const openChampionModel = (championName: string) => {
                 <ChampionDetailsModal
                     isOpen={isModalOpen}
                     onClose={closeChampionModal}
-                    ddVersion={ddData}
+                    ddVersion={ddData[0]}
                     championName={selectedChampion}
                 />
             )}
