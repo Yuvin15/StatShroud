@@ -3,10 +3,13 @@
 import React from 'react';
 import Image from "next/image";
 import Footer from '../../components/Footer';
-import { useEffect, useState } from "react";
+import ChampionDetailsModal from '../../components/ChampionDetailsModal';
+import { useEffect, useState } from "react"; 
 
 export default function ChampionsPage() {
       const [ddData, setddVersion] = useState([]);
+      const [isModalOpen, setIsModalOpen] = useState(false);
+      const [selectedChampion, setSelectedChampion] = useState("");
 
     useEffect(() => {
     const fetchData = async () => {
@@ -199,8 +202,14 @@ const champions = [
 ];
 
 const openChampionModel = (championName: string) => {
-    alert(`You selected ${championName}!`);
+    // alert(`You selected ${championName}!`);
+    setSelectedChampion(championName);
+    setIsModalOpen(true);
 }
+
+  const closeChampionModal = () => {
+    setIsModalOpen(false);
+  };
 
     return (
         <main className="min-h-screen">
@@ -239,6 +248,16 @@ const openChampionModel = (championName: string) => {
                 </div>
             </div>
             <Footer />
+
+            {isModalOpen && (
+                <ChampionDetailsModal
+                    isOpen={isModalOpen}
+                    onClose={closeChampionModal}
+                    ddVersion={ddData}
+                    championName={selectedChampion}
+                />
+            )}
         </main>
+        
     );
 }
