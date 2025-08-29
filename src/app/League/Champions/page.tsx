@@ -5,6 +5,7 @@ import Image from "next/image";
 import Footer from '../../components/Footer';
 import ChampionDetailsModal from '../../components/ChampionDetailsModal';
 import { useEffect, useState } from "react"; 
+import Navbar from "../../components/navbar";
 
 export default function ChampionsPage() {
       const [ddData, setddVersion] = useState([]);
@@ -213,6 +214,7 @@ const openChampionModel = (championName: string) => {
 
     return (
         <main className="min-h-screen">
+            <Navbar />
             {/* Header Section */}
             <div className="py-12">
                 <div className="container mx-auto px-4">

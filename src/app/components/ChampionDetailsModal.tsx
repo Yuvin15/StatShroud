@@ -10,6 +10,11 @@ interface ChampionDetailsProps {
   championName: string;
 }
 
+interface Skin {
+  skinName: string;
+  skinNum: number;
+}
+
 interface ChampionDetails {
   championPassive: string;
   passive_SpellName: string;
@@ -33,6 +38,8 @@ interface ChampionDetails {
 
   champName: string;
   championLore: string;
+
+  champSkins: Skin[];
 }
 
 const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: ChampionDetailsProps) => {
@@ -55,7 +62,11 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
 
         const data = await response.json();
         
-        setChampionDetails(Array.isArray(data) ? data[0] : data);
+        if(championDetails == null)
+        {
+          setChampionDetails(data);
+        }
+        
       } catch (err: any) {
         console.error(err);
         setError(err.message || "Failed to load data");
@@ -70,8 +81,9 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="rounded-2xl shadow-2xl p-6 mx-4 bg-[#0A0A0A] w-full max-w-6xl text-white transition-all duration-300 border border-gray-700 max-h-[90vh] overflow-y-auto">
+    //AI helped here with the onClose on the backdrop
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"  onClick={onClose} > 
+      <div className="rounded-2xl shadow-2xl p-6 mx-4 bg-[#0A0A0A] w-full max-w-6xl text-white transition-all duration-300 border border-gray-700 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
           
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl md:text-2xl font-bold text-yellow-300">{championDetails?.champName}</h2>
@@ -118,7 +130,7 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 justify-center text-center">
               {/* Passive */}
               <div className="bg-gray-800 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold text-yellow-400 mb-2">
+                <h3 className="text-lg font-semibold text-pink-500 mb-2">
                   {championDetails.passive_SpellName} (Passive)
                 </h3>
                 <Image
@@ -200,6 +212,32 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
                 />
                 <div className="text-sm" dangerouslySetInnerHTML={{ __html: championDetails.r_Description }} />
               </div>
+            </div>
+            
+            <div className="mt-8">
+              <h1 className="text-xl md:text-2xl font-bold text-yellow-300 text-center mb-2">Champion Skins</h1>
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {championDetails.champSkins?.map((skin, i) => (
+                  <div key={skin.skinNum} className="bg-gray-800 rounded-lg p-3 text-center hover:shadow-lg duration-300 hover:scale-170 transform transition-transform items-center">
+                    <h3 className="text-sm font-semibold text-white mb-3">
+                      {skin.skinName}
+                    </h3>
+                    <a href={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${championName}_${skin.skinNum}.jpg`} target="_blank" rel="noopener noreferrer">
+                      <Image
+                      src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${championName}_${skin.skinNum}.jpg`}
+                      width={100}
+                      height={100}
+                      title={skin.skinName}
+                      alt={skin.skinName}
+                      unoptimized
+                      className="rounded mb-2 w-full h-auto object-cover"
+                    />
+                    </a>
+                  </div>
+                ))}
+              </div>
+              
             </div>
           </>
         )}

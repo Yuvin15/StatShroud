@@ -5,6 +5,7 @@ import Image from 'next/image'
 import MatchModal from '../components/MatchModal';
 import ArenaMatchModal from '../components/ArenaMatchModal'; 
 import Footer from '../components/Footer';
+import Navbar from '../components/navbar';
 
 export default function League() {
   
@@ -102,8 +103,10 @@ export default function League() {
   };
 
   return (
-    <main className="min-h-screen ">
-        <div className="max-w-4xl mx-auto px-4">
+    <div className="flex flex-col min-h-screen">
+    <main className="flex-grow">
+        <Navbar />
+        <div className="max-w-4xl mx-auto px-4 mt-6">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold mb-2">League Stats Tracker</h1>
             <p className="">Search for player statistics and match history</p>
@@ -134,6 +137,11 @@ export default function League() {
                   <option value="oc1">OCE</option>
                   <option value="ru">RU</option>
                   <option value="tr1">TR</option>
+                  <option value="ph2">PH</option>
+                  <option value="sg2">SG</option>
+                  <option value="th2">TH</option>
+                  <option value="tw2">TW</option>
+                  <option value="vn2">VN</option>
                 </select>
 
                 <input
@@ -316,8 +324,8 @@ export default function League() {
             ddVersion={ddData}
           />
         )}
-        <Footer />
       </main>
-      
+      <Footer />
+    </div>
   );
 }
