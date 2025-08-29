@@ -1,14 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from "react";
 import Image from 'next/image'
 import MatchModal from '../components/MatchModal';
 import ArenaMatchModal from '../components/ArenaMatchModal'; 
 import Footer from '../components/Footer';
 import Navbar from '../components/navbar';
+import { useSearchParams } from "next/navigation";
 
 export default function League() {
   
+  const searchParams = useSearchParams();
+
   const [selectedRegion, setSelectedRegion] = useState('euw1');
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,6 +31,37 @@ export default function League() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isArenaModalOpen, setArenaIsModalOpen] = useState(false);
   const [selectedMatchId, setSelectedMatchId] = useState<string>('');
+
+  const [hasSubmitted, setHasSubmitted] = useState(true);
+
+  useEffect(() => {
+    const playerName = searchParams.get("playerName");
+    const region = searchParams.get("region");
+    setHasSubmitted(true);
+
+    if (playerName)
+    { 
+      setUsername(playerName);
+    };
+    if (region)
+    { 
+      setSelectedRegion(region);
+    };
+
+    if (playerName && region) 
+    {
+      setHasSubmitted(false);
+    }
+
+  }, [searchParams, hasSubmitted]);
+
+  useEffect(() => {
+    
+    if (username && selectedRegion && !hasSubmitted) 
+    {
+      handleSubmit();
+    }
+  }, [username, selectedRegion]);
 
   const handleSubmit = async () => {
 

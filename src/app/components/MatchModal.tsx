@@ -35,6 +35,7 @@ interface Runes {
 
 interface Player {
   playerName: string;
+  playerTag : string;
   teamID: string;
   championName: string;
   laneName: string;
@@ -173,7 +174,9 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                           />
                         </div>
                         <div>
-                          <p className="font-bold text-blue-300">{player.playerName}</p>
+                          <a href={`?playerName=${player.playerName}%23${player.playerTag}&region=${gameRegion}`} target="_blank" title="View Player Details">
+                            <p className="font-bold text-blue-300">{player.playerName}</p>
+                          </a>
                           <p className="font-bold">{player.kda}</p>
                           <p className="font-bold">{player.farm} CS</p>
                         </div>
@@ -355,12 +358,13 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                           />
                         </div>
                         <div>
-                          <p className="font-bold text-red-300">{player.playerName}</p>
+                          <a href={`?playerName=${player.playerName}%23${player.playerTag}&region=${gameRegion}`} target="_blank" title="View Player Details">
+                            <p className="font-bold text-red-300">{player.playerName}</p>
+                          </a>
                           <p className="font-bold">{player.kda}</p>
                           <p className="font-bold">{player.farm} CS</p>
                         </div>
                       </div>
-                      
                       
                       {/* Items */}
                       <div className="flex items-center space-x-1 ">
