@@ -43,13 +43,21 @@ interface ChampionDetails {
 }
 
 const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: ChampionDetailsProps) => {
+
   const [championDetails, setChampionDetails] = useState<ChampionDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // I hate Fiddlesticks both in game and in code, why is his name like that, this is pain
+  const getChampionProperName = (name: string) => 
+  {
+    return name === "Fiddlesticks" ? "FiddleSticks" : name;
+  };
+
   useEffect(() => {
     const fetchChampData = async () => {
       if (!isOpen || !championName) return;
+
       setLoading(true);
       setError("");
 
@@ -123,7 +131,7 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
                 className="rounded mx-auto"
                 title={championName}
               />
-              <p className=" mt-2">{championDetails.championLore}</p>
+              <div className="text-bold" dangerouslySetInnerHTML={{ __html: championDetails.championLore }} />
             </div>
 
             {/* Abilities Section */}
@@ -137,7 +145,7 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
                   src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/passive/${championDetails.championPassive}`}
                   width={64}
                   height={64}
-                  title={`${championName} Passive`}
+                  title={`${championDetails.passive_SpellName}`}
                   alt={`${championName} Passive`}
                   unoptimized
                   className="rounded mb-2 mx-auto"
@@ -154,7 +162,7 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
                   src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/spell/${championDetails.championQ}`}
                   width={64}
                   height={64}
-                  title={`${championName} Q`}
+                  title={`${championDetails.q_SpellName}`}
                   alt={`${championName} Q`}
                   unoptimized
                   className="rounded mb-2 mx-auto"
@@ -171,7 +179,7 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
                   src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/spell/${championDetails.championW}`}
                   width={64}
                   height={64}
-                  title={`${championName} W`}
+                  title={`${championDetails.w_SpellName}`}
                   alt={`${championName} W`}
                   unoptimized
                   className="rounded mb-2 mx-auto"
@@ -188,7 +196,7 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
                   src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/spell/${championDetails.championE}`}
                   width={64}
                   height={64}
-                  title={`${championName} E`}
+                  title={`${championDetails.e_SpellName}`}
                   alt={`${championName} E`}
                   unoptimized
                   className="rounded mb-2 mx-auto"
@@ -205,7 +213,7 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
                   src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/spell/${championDetails.championR}`}
                   width={64}
                   height={64}
-                  title={`${championName} R`}
+                  title={`${championDetails.r_SpellName}`}
                   alt={`${championName} R`}
                   unoptimized
                   className="rounded mb-2 mx-auto"
@@ -219,13 +227,13 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
               
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {championDetails.champSkins?.map((skin, i) => (
-                  <div key={skin.skinNum} className="bg-gray-800 rounded-lg p-3 text-center hover:shadow-lg duration-300 hover:scale-170 transform transition-transform items-center">
+                  <div key={skin.skinNum} className="bg-gray-800 rounded-lg p-3 text-center hover:shadow-lg duration-300 hover:scale-130 hover:focus transform transition-transform items-center">
                     <h3 className="text-sm font-semibold text-white mb-3">
                       {skin.skinName}
                     </h3>
-                    <a href={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${championName}_${skin.skinNum}.jpg`} target="_blank" rel="noopener noreferrer">
+                    <a href={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${getChampionProperName(championName)}_${skin.skinNum}.jpg`} target="_blank" rel="noopener noreferrer">
                       <Image
-                      src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${championName}_${skin.skinNum}.jpg`}
+                      src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${getChampionProperName(championName)}_${skin.skinNum}.jpg`}
                       width={100}
                       height={100}
                       title={skin.skinName}

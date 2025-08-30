@@ -6,13 +6,28 @@ import Footer from '../../components/Footer';
 import ChampionDetailsModal from '../../components/ChampionDetailsModal';
 import { useEffect, useState } from "react"; 
 import Navbar from "../../components/navbar";
+import { useSearchParams } from "next/navigation";
 
 export default function ChampionsPage() {
-      const [ddData, setddVersion] = useState([]);
-      const [isModalOpen, setIsModalOpen] = useState(false);
-      const [selectedChampion, setSelectedChampion] = useState("");
+
+    const searchParams = useSearchParams();
+    const [ddData, setddVersion] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedChampion, setSelectedChampion] = useState("");
 
     useEffect(() => {
+
+    const champName = searchParams.get("champion");
+
+    if (champName && champions.find(champion => champion.name === champName)) 
+    {
+        setSelectedChampion(champName);
+        openChampionModel(champName);
+    } else 
+    {
+        console.log('Champion not found in dictionary');
+    }
+
     const fetchData = async () => {
       try {
         const ddVersion = await fetch(`https://ddragon.leagueoflegends.com/api/versions.json`);
@@ -62,7 +77,7 @@ const champions = [
     { name: "Elise", image: "Elise" },
     { name: "Evelynn", image: "Evelynn" },
     { name: "Ezreal", image: "Ezreal" },
-    { name: "Fiddlesticks", image: "Fiddlesticks" },
+    { name: "FiddleSticks", image: "Fiddlesticks" },
     { name: "Fiora", image: "Fiora" },
     { name: "Fizz", image: "Fizz" },
     { name: "Galio", image: "Galio" },
@@ -202,11 +217,11 @@ const champions = [
     { name: "Zyra", image: "Zyra" }
 ];
 
-const openChampionModel = (championName: string) => {
-    // alert(`You selected ${championName}!`);
-    setSelectedChampion(championName);
-    setIsModalOpen(true);
-}
+    const openChampionModel = (championName: string) => {
+        // alert(`You selected ${championName}!`);
+        setSelectedChampion(championName);
+        setIsModalOpen(true);
+    }
 
   const closeChampionModal = () => {
     setIsModalOpen(false);
