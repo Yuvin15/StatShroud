@@ -163,15 +163,17 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
                         <div className="relative">
-                          <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/${player.championName}.png`}
-                            width={50}
-                            height={50}
-                            alt="Champion"
-                            unoptimized
-                            className="rounded"
-                            title={player.championName}
-                          />
+                          <a href={`/League/Champions?champion=${player.championName}`} target="_blank" title="View Champion Details">
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/${player.championName}.png`}
+                              width={50}
+                              height={50}
+                              alt="Champion"
+                              unoptimized
+                              className="rounded"
+                              title={player.championName}
+                            />
+                          </a>
                         </div>
                         <div>
                           <a href={`?playerName=${player.playerName}%23${player.playerTag}&region=${gameRegion}`} target="_blank" title="View Player Details">
@@ -347,15 +349,17 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                     <div className="flex items-center justify-between ">
                       <div className="flex items-center space-x-4">
                         <div className="relative">
-                          <Image
-                            src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/${player.championName}.png`}
-                            width={50}
-                            height={50}
-                            alt="Champion"
-                            unoptimized
-                            className="rounded"
-                            title={player.championName}
-                          />
+                          <a href={`/League/Champions?champion=${player.championName}`} target="_blank" title="View Champion Details">
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/${player.championName}.png`}
+                              width={50}
+                              height={50}
+                              alt="Champion"
+                              unoptimized
+                              className="rounded"
+                              title={player.championName}
+                            />
+                          </a>
                         </div>
                         <div>
                           <a href={`?playerName=${player.playerName}%23${player.playerTag}&region=${gameRegion}`} target="_blank" title="View Player Details">

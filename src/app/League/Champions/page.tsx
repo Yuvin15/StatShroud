@@ -19,7 +19,7 @@ export default function ChampionsPage() {
 
     const champName = searchParams.get("champion");
 
-    if (champName && champions.find(champion => champion.name === champName)) 
+    if (champName && champions.find(champion => champion.image === champName)) 
     {
         setSelectedChampion(champName);
         openChampionModel(champName);
