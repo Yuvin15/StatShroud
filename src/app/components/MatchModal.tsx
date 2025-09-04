@@ -154,14 +154,14 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
           );
 
           return (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Blue Side */}
               <div>
                 <h3 className="text-blue-400 text-xl font-semibold mb-2">Blue Team</h3>
                 {blueTeam.map((player: Player, index: number) => (
                   <div key={`blue-${player.playerName}-${index}`} className="bg-black rounded-lg p-3 mb-3 text-sm">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
                         <div className="relative">
                           <a href={`/League/Champions?champion=${player.championName}`} target="_blank" title="View Champion Details">
                             <Image
@@ -175,7 +175,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                             />
                           </a>
                         </div>
-                        <div>
+                        <div className="">
                           <a href={`?playerName=${player.playerName}%23${player.playerTag}&region=${gameRegion}`} target="_blank" title="View Player Details">
                             <p className="font-bold text-blue-300">{player.playerName}</p>
                           </a>
@@ -346,8 +346,8 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                 <h3 className="text-red-400 text-xl font-semibold mb-2">Red Team</h3>
                 {redTeam.map((player: Player, index: number) => (
                   <div key={`red-${player.playerName}-${index}`} className="bg-black rounded-lg p-3 mb-3 text-sm">
-                    <div className="flex items-center justify-between ">
-                      <div className="flex items-center space-x-4">
+                     <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
                         <div className="relative">
                           <a href={`/League/Champions?champion=${player.championName}`} target="_blank" title="View Champion Details">
                             <Image
