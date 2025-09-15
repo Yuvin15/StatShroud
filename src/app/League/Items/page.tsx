@@ -8,16 +8,16 @@ import Navbar from "../../components/navbar";
 import { useSearchParams } from "next/navigation";
 
 interface Item {
-    itemID: number;           // Changed from ItemID
-    itemName: string;         // Changed from ItemName
-    itemDetail: string;       // Changed from ItemDetail
-    isActive: boolean;        // Changed from IsActive
-    price: number;            // Changed from Price
-    priceTotal: number;       // Changed from PriceTotal
-    canPurchase: boolean;     // Changed from CanPurchase
-    buildFrom: number[] | null;   // Changed from BuildFrom
-    buildTo: number[] | null;     // Changed from BuildTo
-    itemCategories: string[];     // Changed from ItemCategories
+    itemID: number;                 
+    itemName: string;               
+    itemDetail: string;             
+    isActive: boolean;              
+    price: number;                  
+    priceTotal: number;             
+    canPurchase: boolean;           
+    buildFrom: number[] | null;     
+    buildTo: number[] | null;       
+    itemCategories: string[];       
 }
 
 export default function ChampionsPage() {

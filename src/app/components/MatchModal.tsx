@@ -194,8 +194,8 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                           player.playerItems.item5,
                           player.playerItems.item6
                         ].map((itemId, itemIndex) => (
-                          <div key={itemIndex} className="w-7 h-7 border border-blue-500 rounded">
-                            {itemId && (
+                          <div key={itemIndex} className="w-7 h-7 border border-blue-500 rounded bg-gray-700">
+                            {itemId && ( 
                               <Image
                                 src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/item/${itemId}.png`}
                                 width={28}
@@ -380,7 +380,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                           player.playerItems.item5,
                           player.playerItems.item6
                         ].map((itemId, itemIndex) => (
-                          <div key={itemIndex} className="w-7 h-7 border border-red-500 rounded">
+                          <div key={itemIndex} className="w-7 h-7 border border-red-500 rounded bg-gray-700">
                             {itemId && (
                               <Image
                                 src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/item/${itemId}.png`}
