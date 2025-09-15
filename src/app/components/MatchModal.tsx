@@ -162,7 +162,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                   <div key={`blue-${player.playerName}-${index}`} className="bg-black rounded-lg p-3 mb-3 text-sm">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
-                        <div className="relative">
+                        <div className="relative group">
                           <a href={`/League/Champions?champion=${player.championName}`} target="_blank" title="View Champion Details">
                             <Image
                               src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/${player.championName}.png`}
@@ -171,9 +171,13 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                               alt="Champion"
                               unoptimized
                               className="rounded"
-                              title={player.championName}
                             />
                           </a>
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-white w-48 z-10">
+                            <div className="font-bold text-blue-300 mb-1">
+                                View {player.championName}'s Details
+                            </div>
+                          </div>
                         </div>
                         <div className="">
                           <a href={`?playerName=${player.playerName}%23${player.playerTag}&region=${gameRegion}`} target="_blank" title="View Player Details">
@@ -348,7 +352,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                   <div key={`red-${player.playerName}-${index}`} className="bg-black rounded-lg p-3 mb-3 text-sm">
                      <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
-                        <div className="relative">
+                        <div className="relative group">
                           <a href={`/League/Champions?champion=${player.championName}`} target="_blank" title="View Champion Details">
                             <Image
                               src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/${player.championName}.png`}
@@ -357,9 +361,13 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                               alt="Champion"
                               unoptimized
                               className="rounded"
-                              title={player.championName}
                             />
                           </a>
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-5 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-white w-48 z-10">
+                            <div className="font-bold text-red-300 mb-1">
+                                View {player.championName}'s Details
+                            </div>
+                          </div>
                         </div>
                         <div>
                           <a href={`?playerName=${player.playerName}%23${player.playerTag}&region=${gameRegion}`} target="_blank" title="View Player Details">

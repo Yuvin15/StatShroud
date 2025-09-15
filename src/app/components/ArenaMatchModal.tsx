@@ -22,12 +22,24 @@ interface PlayerItems {
 }
 
 interface Augments {
-  augments1: number;
-  augments2: number;
-  augments3: number;
-  augments4: number;
-  augments5: number;
-  augments6: number;
+  augments1: string  | null;
+  augments1Name: string  | null;
+  augments1Description: string  | null;
+  augments2: string  | null;
+  augments2Name: string  | null;
+  augments2Description: string  | null;
+  augments3: string  | null;
+  augments3Name: string  | null;
+  augments3Description: string  | null;
+  augments4: string  | null;
+  augments4Name: string  | null;
+  augments4Description: string  | null;
+  augments5: string  | null;
+  augments5Name: string  | null;
+  augments5Description: string  | null;
+  augments6: string  | null;
+  augments6Name: string  | null;
+  augments6Description: string  | null;
 }
 
 interface Player {
@@ -167,20 +179,28 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: Ar
                 <div className="flex flex-col gap-4">
                   {team.players.map((player, playerIndex) => (
                     <div key={`${player.playerName}-${playerIndex}`} className="flex flex-col items-center">
-                      
-                      <Image
+                    
+                      <span className="mt-2 font-bold text-sm text-center text-white">
+                        {player.playerName}
+                      </span>  
+
+                      <div  className="relative group">
+                        <Image
                         src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/${player.championName}.png`}
                         alt={player.championName}
                         width={100}
                         height={50}
                         className="object-cover rounded-xl shadow-lg"
                         unoptimized
-                      />
-                      
-                      <span className="mt-2 font-semibold text-sm text-center text-white">
-                        {player.playerName}
-                      </span>
-                      
+                        />
+                        
+                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 font-bold rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-white">
+                            <div className="font-bold text-purple-400 mb-1">
+                              {player.championName}
+                            </div>
+                        </div>
+
+                      </div>
                       <span className="font-bold">
                         KDA : {player.kda}
                       </span>
@@ -203,19 +223,45 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: Ar
                         ))}
                       </div>
                       
+                      {/* AI helped build custom Tooltip and how to set up the augments loop properly */}
                       <div className="flex mt-2 space-x-1 flex-wrap justify-center">
-                        {[player.augments.augments1, player.augments.augments2, player.augments.augments3, 
-                          player.augments.augments4, player.augments.augments5, player.augments.augments6].map((augmentID, augmentIndex) => (
-                          <div key={augmentIndex} className="w-7 h-7 border border-blue-500 rounded bg-gray-700">
-                            {augmentID && ( 
-                              <Image
-                                src={`https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/${augmentID}.png`}
-                                width={28}
-                                height={28}
-                                alt="Item"
-                                unoptimized
-                                className="rounded border border-gray-600"
-                              />
+                        {[
+                          { id: player.augments.augments1, name: player.augments.augments1Name, desc: player.augments.augments1Description },
+                          { id: player.augments.augments2, name: player.augments.augments2Name, desc: player.augments.augments2Description },
+                          { id: player.augments.augments3, name: player.augments.augments3Name, desc: player.augments.augments3Description },
+                          { id: player.augments.augments4, name: player.augments.augments4Name, desc: player.augments.augments4Description },
+                          { id: player.augments.augments5, name: player.augments.augments5Name, desc: player.augments.augments5Description },
+                          { id: player.augments.augments6, name: player.augments.augments6Name, desc: player.augments.augments6Description }
+                        ].map((augment, augmentIndex) => (
+                          <div key={augmentIndex} className="w-7 h-7 border border-blue-500 rounded bg-gray-700 relative group">
+                            {augment.id && ( 
+                              <>
+                                <Image
+                                  src={`https://raw.communitydragon.org/latest/game/${augment.id}`}
+                                  width={28}
+                                  height={28}
+                                  alt={augment.name || "Augment"}
+                                  unoptimized
+                                  className="rounded border border-gray-600"
+                                />
+                                
+                                {(augment.name || augment.desc) && (
+                                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-white text-xs w-50">
+                                    {/* Augment Name */}
+                                    {augment.name && (
+                                      <div className="font-bold text-red-300 mb-1">
+                                        {augment.name}
+                                      </div>
+                                    )}
+                                    {/* Augment Description with HTML */}
+                                    {augment.desc && (
+                                      <div 
+                                        dangerouslySetInnerHTML={{ __html: augment.desc }}
+                                      />
+                                    )}
+                                  </div>
+                                )}
+                              </>
                             )}
                           </div>
                         ))}
@@ -240,7 +286,7 @@ const ArenaMatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: Ar
                         />
                       </div>
                       
-                      <div className="text-center font-bold">
+                      <div className="text-center text-xs font-medium">
                         <div>Damage Dealt: {player.damage}</div>
                         <div>Damage Taken: {player.damageTaken}</div>
                       </div>

@@ -278,7 +278,7 @@ export default function League() {
 
               <div className="">
                 <p className="font-black text-center">
-                  Last 10 Games
+                  Last 20 Games
                 </p>
                 <table className="w-full table-auto border-separate border-spacing-y-4" id='MatchHistoryTableID'>
                  <tbody>
