@@ -173,15 +173,20 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                               className="rounded"
                             />
                           </a>
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-white w-48 z-10">
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-white text-center">
                             <div className="font-bold text-blue-300 mb-1">
                                 View {player.championName}'s Details
                             </div>
                           </div>
                         </div>
-                        <div className="">
-                          <a href={`?playerName=${player.playerName}%23${player.playerTag}&region=${gameRegion}`} target="_blank" title="View Player Details">
+                        <div className="relative group">
+                          <a href={`?playerName=${player.playerName}%23${player.playerTag}&region=${gameRegion}`} target="_blank">
                             <p className="font-bold text-blue-300">{player.playerName}</p>
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-white text-center">
+                              <div className="font-bold text-blue-300 mb-1">
+                                View {player.playerName}'s Details
+                              </div>
+                            </div>
                           </a>
                           <p className="font-bold">{player.kda}</p>
                           <p className="font-bold">{player.farm} CS</p>
@@ -363,15 +368,20 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                               className="rounded"
                             />
                           </a>
-                          <div className="absolute bottom-full left-1/2 transform -translate-x-5 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-white w-48 z-10">
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-5 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-white text-center">
                             <div className="font-bold text-red-300 mb-1">
                                 View {player.championName}'s Details
                             </div>
                           </div>
                         </div>
-                        <div>
-                          <a href={`?playerName=${player.playerName}%23${player.playerTag}&region=${gameRegion}`} target="_blank" title="View Player Details">
-                            <p className="font-bold text-red-300">{player.playerName}</p>
+                        <div className="relative group">
+                          <a href={`?playerName=${player.playerName}%23${player.playerTag}&region=${gameRegion}`} target="_blank">
+                            <p className="font-bold text-blue-300">{player.playerName}</p>
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-white text-center">
+                              <div className="font-bold text-red-300 mb-1">
+                                View {player.playerName}'s Details
+                              </div>
+                            </div>
                           </a>
                           <p className="font-bold">{player.kda}</p>
                           <p className="font-bold">{player.farm} CS</p>
