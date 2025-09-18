@@ -276,54 +276,52 @@ export default function League() {
 
               </div>
 
-              <div className="">
-                <p className="font-black text-center">
-                  Last 20 Games
-                </p>
-                <table className="w-full table-auto border-separate border-spacing-y-4" id='MatchHistoryTableID'>
-                 <tbody>
-                   {matchHistory.map((match: any, index: number) => (
-                     <tr
-                       key={index}
-                       className={`border-b border-black text-white ${
-                         match.gameWinner == 'Victory' ? 'bg-[#25b8f7]' : 'bg-[#b80000]'
-                       }`}
-                     >
-                       <td className="p-4">
-                         <div className="flex items-center">
-                           <Image
-                             src={`https://ddragon.leagueoflegends.com/cdn/${ddData}/img/champion/${match.championName}.png`}
-                             width={100}
-                             height={100}
-                             unoptimized
-                             alt={match.championName}
-                            title={match.championName}
-                           />
-                           <div className="ml-4">
-                             <p className="font-bold">{match.championName}</p>
-                             <p className="text-sm">{match.gameMode}</p>
-                           </div>
-                         </div>
-                       </td>
-                       <td className="p-4">
-                         <div className="flex flex-col text-sm space-y-1">
-                           <span>KDA: {match.kda}</span>
-                           <span>CS: {match.farm}</span>
-                         </div>
-                       </td>
-                       <td className="p-4 text-right">
-                          <button
-                            className="px-4 py-2 bg-white text-black font-medium rounded-lg hover:bg-black hover:text-white transition" 
-                            onClick={() => openModal(match.matchID, match.gameMode)}
-                          >
-                            <p className="font-bold">See details</p>
-                          </button>
-                       </td>
-                     </tr>
-                   ))}
-                </tbody>
-              </table>
+              <div className="p-4">
+                <p className="font-black text-center mb-4">Last 20 Games</p>
+
+                <div className="space-y-4">
+                  {matchHistory.map((match: any, index: number) => (
+                    <div
+                      key={index}
+                      className={`flex flex-col sm:flex-row items-center sm:justify-between text-white p-4 ${
+                        match.gameWinner === 'Victory' ? 'bg-[#25b8f7]' : 'bg-[#b80000]'
+                      }`}
+                    >
+                      
+                      <div className="flex items-center mb-2 sm:mb-0">
+                        <Image
+                          src={`https://ddragon.leagueoflegends.com/cdn/${ddData}/img/champion/${match.championName}.png`}
+                          width={60}
+                          height={60}
+                          unoptimized
+                          alt={match.championName}
+                          title={match.championName}
+                          className=""
+                        />
+                        <div className="m-3">
+                          <p className="font-bold">{match.championName}</p>
+                          <p className="text-sm">{match.gameMode}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col text-sm mb-2 sm:mb-0">
+                        <span>KDA: {match.kda}</span>
+                        <span>CS: {match.farm}</span>
+                      </div>
+
+                      <div className="w-full sm:w-auto text-center sm:text-right">
+                        <button
+                          className="px-4 py-2 bg-white text-black font-medium rounded-lg hover:bg-black hover:text-white transition"
+                          onClick={() => openModal(match.matchID, match.gameMode)}
+                        >
+                          <p className="font-bold">See details</p>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
+
             </div>
           )}
 

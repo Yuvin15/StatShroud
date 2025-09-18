@@ -57,11 +57,36 @@ interface Player {
   runes: Runes;
 }
 
+
+interface Game {
+  gameID: string;
+  gameWinner: string;
+  gameMode: string;
+  totalBlueKills: number;
+  totalRedKills: number;
+  totalBlueDragonKills: number;
+  totalRedDragonKills: number;
+  totalBlueBaronKills: number;
+  totalRedBaronKills: number;
+  totalBlueTurrets: number;
+  totalRedTurrets: number;
+  totalBlueInhib: number;
+  totalRedInhib: number;
+  blueHearldKills: number;
+  redHearldKills: number;
+  blueAtakhanKills: number;
+  redAtakhanKills: number;
+  blueTeamBans: string[];
+  redTeamBans: string[];
+  players: Player[];
+}
+
 const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchModalProps) => {
   const [GameID, setGameID] = useState("");
   const [GameWinner, setGameWinner] = useState("Loading...");
   const [GameMode, setGameMode] = useState("Loading...");
   const [Players, setPlayers] = useState<Player[]>([]);
+  const [GameStats, setGameStats] = useState<Game>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -88,6 +113,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
         setGameWinner(data.gameWinner);
         setGameMode(data.gameMode);
         setPlayers(data.players || []);
+        setGameStats(data)
       } catch (err: any) {
         console.error(err);
         setError(err.message || "Failed to load data");
@@ -107,7 +133,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onClose} >
-      <div className="rounded-2xl shadow-2xl p-6 mx-4 bg-[#0A0A0A] w-full max-w-6xl text-white transition-all duration-300 border border-gray-700 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+      <div className="rounded-2xl shadow-2xl p-6 mx-4 bg-[#0A0A0A] w-full max-w-3/4 text-white transition-all duration-300 border border-gray-700 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-yellow-300">Match Details</h2>
@@ -158,6 +184,53 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
               {/* Blue Side */}
               <div>
                 <h3 className="text-blue-400 text-xl font-semibold mb-2">Blue Team</h3>
+                <div className="flex space-x-4 mb-4">
+                  <Image
+                  src='https://raw.communitydragon.org/latest/game/assets/ux/minimap/icons/dragon.png'
+                  width={50}
+                  height={50}
+                  alt="Champion"
+                  unoptimized
+                  className="rounded"
+                  />
+                  <span className="flex flex-col items-center justify-center">
+                    {GameStats?.totalBlueDragonKills}
+                  </span>
+                  
+                  <Image
+                    src='https://raw.communitydragon.org/latest/game/assets/ux/minimap/icons/baron.png'
+                    width={50}
+                    height={50}
+                    alt="Champion"
+                    unoptimized
+                    className="rounded"
+                  />
+                  <span className="flex flex-col items-center justify-center">
+                    {GameStats?.totalBlueBaronKills}
+                  </span>
+                  <Image
+                    src='https://raw.communitydragon.org/latest/game/assets/ux/minimap/icons/atakhan_r.png'
+                    width={50}
+                    height={50}
+                    alt="Champion"
+                    unoptimized
+                    className="rounded"
+                  />
+                  <span className="flex flex-col items-center justify-center">
+                    {GameStats?.blueAtakhanKills}
+                  </span>
+                  <Image
+                    src='https://raw.communitydragon.org/latest/game/assets/ux/minimap/icons/riftherald.png'
+                    width={50}
+                    height={50}
+                    alt="Champion"
+                    unoptimized
+                    className="rounded"
+                  />
+                  <span className="flex flex-col items-center justify-center">
+                    {GameStats?.blueHearldKills}
+                  </span>
+                </div>
                 {blueTeam.map((player: Player, index: number) => (
                   <div key={`blue-${player.playerName}-${index}`} className="bg-black rounded-lg p-3 mb-3 text-sm">
                     <div className="flex items-center justify-between">
@@ -353,6 +426,52 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
               {/* Red Side */}
               <div>
                 <h3 className="text-red-400 text-xl font-semibold mb-2">Red Team</h3>
+                <div className="flex space-x-4 mb-4">
+                  <Image
+                  src='https://raw.communitydragon.org/latest/game/assets/ux/minimap/icons/dragon.png'
+                  width={50}
+                  height={50}
+                  alt="Champion"
+                  unoptimized
+                  className="rounded"
+                  />
+                  <span className="flex flex-col items-center justify-center">
+                    {GameStats?.totalRedDragonKills}
+                  </span>
+                  <Image
+                    src='https://raw.communitydragon.org/latest/game/assets/ux/minimap/icons/baron.png'
+                    width={50}
+                    height={50}
+                    alt="Champion"
+                    unoptimized
+                    className="rounded"
+                  />
+                  <span className="flex flex-col items-center justify-center">
+                    {GameStats?.totalRedBaronKills}
+                  </span>
+                  <Image
+                    src='https://raw.communitydragon.org/latest/game/assets/ux/minimap/icons/atakhan_r.png'
+                    width={50}
+                    height={50}
+                    alt="Champion"
+                    unoptimized
+                    className="rounded"
+                  />
+                  <span className="flex flex-col items-center justify-center">
+                    {GameStats?.redAtakhanKills}
+                  </span>
+                  <Image
+                    src='https://raw.communitydragon.org/latest/game/assets/ux/minimap/icons/riftherald.png'
+                    width={50}
+                    height={50}
+                    alt="Champion"
+                    unoptimized
+                    className="rounded"
+                  />
+                  <span className="flex flex-col items-center justify-center">
+                    {GameStats?.redHearldKills}
+                  </span>
+                </div>
                 {redTeam.map((player: Player, index: number) => (
                   <div key={`red-${player.playerName}-${index}`} className="bg-black rounded-lg p-3 mb-3 text-sm">
                      <div className="flex items-center justify-between">
