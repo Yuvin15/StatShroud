@@ -1,47 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
+import { ChangeEvent, SetStateAction, useState } from "react";
 import Image from "next/image";
-import Footer from '../../components/Footer';
-import ChampionDetailsModal from '../../components/ChampionDetailsModal';
-import { useEffect, useState } from "react"; 
-import Navbar from "../../components/navbar";
-import { useSearchParams } from "next/navigation";
-
-export default function ChampionsPage() {
-
-    const searchParams = useSearchParams();
-    const [ddData, setddVersion] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedChampion, setSelectedChampion] = useState("");
-
-    useEffect(() => {
-
-    const champName = searchParams.get("champion");
-
-    if (champName && champions.find(champion => champion.image === champName)) 
-    {
-        setSelectedChampion(champName);
-        openChampionModel(champName);
-    } else 
-    {
-        console.log('Champion not found in dictionary');
-    }
-
-    const fetchData = async () => {
-      try {
-        const ddVersion = await fetch(`https://ddragon.leagueoflegends.com/api/versions.json`);
-        const json = await ddVersion.json();
-        setddVersion(json);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        console.log("Fetch attempt finished.");
-      }
-    };
-
-    fetchData();
-  }, []);
+import Navbar from "@/app/components/navbar";
+import Footer from "@/app/components/Footer";
 
 const champions = [
     { name: "Aatrox", image: "Aatrox" },
@@ -217,64 +179,162 @@ const champions = [
     { name: "Zyra", image: "Zyra" }
 ];
 
-    const openChampionModel = (championName: string) => {
-        // alert(`You selected ${championName}!`);
-        setSelectedChampion(championName);
-        setIsModalOpen(true);
-    }
+const roles = [
+  { name: "Top", image: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-top.png" },
+  { name: "Jungle", image: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-jungle.png" },
+  { name: "Mid", image: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-middle.png" },
+  { name: "ADC", image: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-bottom.png" },
+  { name: "Support", image: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-utility.png" }
+];
 
-  const closeChampionModal = () => {
-    setIsModalOpen(false);
-  };
+const messages = [
+  "Calculating the best champion to lose on...",
+  "Consulting the crystal ball...",
+  "Rolling a dice of despair...",
+  "Analyzing your tragic gameplay...",
+  "Messaging Teemo for advice...",
+  "Spinning the wheel of misfortune...",
+  "Asking the minions for their opinion...",
+  "Checking the latest tilt trends...",
+  "Finding the most frustrating pick...",
+  "Loading your next disappointment...",
+  "Preparing your next excuse...",
+  "Choosing a champion to make you rage quit...",
+  "Selecting a champion to test your patience...",
+  "Deciding on a champion to ruin your day...",
+  "Picking a champion to challenge your skills...",
+  "Choosing a champion to make you question your life choices...",
+  "Finding a champion to make you scream at your screen...",
+  "Selecting a champion to make you want to throw your keyboard...",
+  "Deciding on a champion to make you regret playing League of Legends..."
+];
 
-    return (
-        <main className="min-h-screen">
-            <Navbar />
-            {/* Header Section */}
-            <div className="py-12">
-                <div className="container mx-auto px-4">
-                    <h1 className="text-4xl font-bold text-center mb-4">Champions</h1>
-                    <p className="text-xl text-center">Click on any champion to view their abilities and detailed stats</p>
-                </div>
-            </div>
+// AI helped me with the spinning function
+export default function Spinner() {
+  const [selectedValue, setSelectedValue] = useState("ChampionOnly");
+  const [displayMessage, setDisplayMessage] = useState<string | null>(null);
+  const [selectedChampion, setSelectedChampion] = useState<typeof champions[0] | null>(null);
+  const [selectedRole, setSelectedRole] = useState<typeof roles[0] | null>(null);
+  const [spinning, setSpinning] = useState(false);
 
-            {/* Champions Grid */}
-            <div className="container mx-auto px-4 py-12">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 cursor-pointer">
-                    {champions.map((champion, index) => (
-                        <div 
-                            key={index} 
-                            className="bg-[#0A0A0A] rounded-lg shadow-md hover:shadow-lg duration-300 p-4 text-center group hover:scale-105 transform transition-transform"
-                        >
-                            <h3 className="text-lg font-semibold">
-                                {champion.name}
-                            </h3>
-                            <div className="relative overflow-hidden rounded-lg mb-4">
-                                <Image
-                                    src={`https://ddragon.leagueoflegends.com/cdn/15.17.1/img/champion/${champion.image}.png`}
-                                    alt={champion.name}
-                                    width={120}
-                                    height={120}
-                                    className="mx-auto group-hover:scale-110 transition-transform duration-300"
-                                    unoptimized
-                                    onClick={() =>openChampionModel(champion.image)}
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-            <Footer />
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    setSelectedValue(event.target.value);
+  }
 
-            {isModalOpen && (
-                <ChampionDetailsModal
-                    isOpen={isModalOpen}
-                    onClose={closeChampionModal}
-                    ddVersion={ddData[0]}
-                    championName={selectedChampion}
-                />
-            )}
-        </main>
-        
-    );
+  function spin() {
+    if (spinning) return;
+    setSpinning(true);
+    setSelectedChampion(null);
+    setSelectedRole(null);
+
+    let cycles = 10;
+    const intervalTime = 1000;
+    const interval = setInterval(() => {
+      const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+      setDisplayMessage(randomMsg);
+      cycles--;
+
+      if (cycles <= 0) {
+        clearInterval(interval);
+        const randomChampion = champions[Math.floor(Math.random() * champions.length)];
+        setSelectedChampion(randomChampion);
+
+        if (selectedValue === "ChampionAndRoleOnly") {
+          const randomRole = roles[Math.floor(Math.random() * roles.length)];
+          setSelectedRole(randomRole);
+        }
+
+        setDisplayMessage("Your champion has been chosen!");
+        setSpinning(false);
+      }
+    }, intervalTime);
+  }
+
+  return (
+    <main className="flex flex-col min-h-screen">
+      <Navbar />
+
+      <div className="flex-1 flex flex-col items-center justify-center p-4">
+        <h1 className="text-3xl font-bold mb-6">Random Champion Spinner</h1>
+
+        <p className="text-center text-lg md:text-xl font-bold p-4 rounded-xl mb-4">
+          Want to spice up your next game?<br />
+          Will you risk the fate of your next game to RNG?<br />
+          Pick if you want a random <span className="text-green-400 font-extrabold">role </span> 
+          and <span className="text-blue-400 font-extrabold">champion</span>, or just a <span className="text-blue-400 font-extrabold">champion</span>.
+        </p>
+
+        <div className="flex gap-6 mb-4">
+          <div className="flex items-center">
+            <input
+              type="radio"
+              id="championOnly"
+              name="myRadioGroup"
+              value="ChampionOnly"
+              checked={selectedValue === "ChampionOnly"}
+              onChange={handleChange}
+              className="hidden peer"
+            />
+            <label htmlFor="championOnly" className="peer-checked:bg-black peer-checked:text-white px-4 py-2 rounded-lg border">Champion only</label>
+          </div>
+
+          <div className="flex items-center">
+            <input
+              type="radio"
+              id="championAndRole"
+              name="myRadioGroup"
+              value="ChampionAndRoleOnly"
+              checked={selectedValue === "ChampionAndRoleOnly"}
+              onChange={handleChange}
+              className="hidden peer"
+            />
+            <label htmlFor="championAndRole" className="peer-checked:bg-black peer-checked:text-white px-4 py-2 rounded-lg border">Champion and Role</label>
+          </div>
+        </div>
+
+        <button
+          onClick={spin}
+          disabled={spinning}
+          className={`px-6 py-2 rounded-lg mb-6 ${
+            spinning ? "bg-gray-500 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
+          }`}
+        >
+          Spin <span className="italic font-bold">to lose</span>
+        </button>
+
+        {displayMessage && <p className="text-lg font-mono mb-4">{displayMessage}</p>}
+
+        {selectedChampion && (
+          <>
+            <Image
+              src={`https://ddragon.leagueoflegends.com/cdn/15.19.1/img/champion/${selectedChampion.image}.png`}
+              alt={selectedChampion.name}
+              width={150}
+              height={150}
+              className="rounded-lg shadow-lg"
+              unoptimized
+            />
+            <p className="mt-4 text-lg font-semibold">{selectedChampion.name}</p>
+          </>
+        )}
+
+        {/* Display selected role */}
+        {selectedRole && (
+          <>
+            <Image
+              src={selectedRole.image}
+              alt={selectedRole.name}
+              width={100}
+              height={100}
+              className="rounded-lg shadow-lg mt-2"
+              unoptimized
+            />
+            <p className="mt-2 text-lg font-semibold">{selectedRole.name}</p>
+          </>
+        )}
+      </div>
+
+      <Footer />
+    </main>
+  );
 }

@@ -53,14 +53,23 @@ export default function Navbar() {
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                   <Link
                     href="/League/Items"
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    className="block px-4 py-2 text-black hover:bg-[#00558c] hover:text-white hover:rounded-md"
                     onClick={() => setIsDropdownOpen(false)}
                   >
                     Items
                   </Link>
+
+                  <Link
+                    href="/League/ChampionPicker"
+                    className="block px-4 py-2 text-black hover:bg-[#00558c] hover:text-white hover:rounded-md"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    Random champion picker
+                  </Link>
+
                   <Link
                     href=""
-                    className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                    className="block px-4 py-2 text-black hover:bg-[#00558c] hover:text-white hover:rounded-md"
                     onClick={() => setIsDropdownOpen(false)}
                   >
                     Coming Soon
@@ -130,36 +139,29 @@ export default function Navbar() {
                 Coming Soon ▾
               </button>
               {isDropdownOpen && (
-                <div className="pl-4 mt-1 space-y-1">
+                <div className="pl-4 mt-1 space-y-1 ">
                   <Link
-                    href="/feature1"
-                    className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium"
-                    onClick={() => {
-                      toggleMenu();
-                      setIsDropdownOpen(false);
-                    }}
+                    href="/League/Items"
+                    className="block px-4 py-2 hover:bg-[#00558c] rounded transition-colors duration-200"
+                    onClick={() => setIsDropdownOpen(false)}
                   >
-                    Feature 1
+                    Items
                   </Link>
+
                   <Link
-                    href="/feature2"
-                    className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium"
-                    onClick={() => {
-                      toggleMenu();
-                      setIsDropdownOpen(false);
-                    }}
+                    href="/League/ChampionPicker"
+                    className="block px-4 py-2 hover:bg-[#00558c] rounded transition-colors duration-200"
+                    onClick={() => setIsDropdownOpen(false)}
                   >
-                    Feature 2
+                    Random champion picker
                   </Link>
+
                   <Link
-                    href="/feature3"
-                    className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium"
-                    onClick={() => {
-                      toggleMenu();
-                      setIsDropdownOpen(false);
-                    }}
+                    href=""
+                    className="block px-4 py-2 hover:bg-[#00558c] rounded  transition-colors duration-200"
+                    onClick={() => setIsDropdownOpen(false)}
                   >
-                    Feature 3
+                    Coming Soon
                   </Link>
                 </div>
               )}

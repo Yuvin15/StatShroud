@@ -6,6 +6,7 @@ import Footer from '../../components/Footer';
 import { useEffect, useState } from "react"; 
 import Navbar from "../../components/navbar";
 import { useSearchParams } from "next/navigation";
+import ItemModal from '@/app/components/ItemModal';
 
 interface Item {
     itemID: number;                 
@@ -26,6 +27,7 @@ export default function ChampionsPage() {
     const [ddData, setddVersion] = useState<string[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [items, setItems] = useState<Item[]>([]);
+    const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -46,7 +48,18 @@ export default function ChampionsPage() {
         };
 
         fetchData();
+
+        
     }, []);
+
+    const openItemModal = (item: Item) => {
+        setSelectedItem(item);
+        setIsModalOpen(true);
+    }
+
+    const closeItemModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <main className="min-h-screen">
@@ -66,7 +79,7 @@ export default function ChampionsPage() {
                         <div 
                             key={`item-${item.itemID}-${index}`}
                             className="bg-[#0A0A0A] rounded-lg shadow-md hover:shadow-lg duration-300 p-4 text-center group hover:scale-105 transform transition-transform cursor-pointer"
-                            // onClick={() => openChampionModel(item.ItemID)}
+                            onClick={() => openItemModal(item)}
                         >
                             <div className="relative overflow-hidden rounded-lg mb-4">
                                 <Image
@@ -89,6 +102,15 @@ export default function ChampionsPage() {
                 </div>
             </div>
             <Footer />
+
+            {isModalOpen && selectedItem && (
+                <ItemModal
+                    isOpen={isModalOpen}
+                    onClose={closeItemModal}
+                    ddVersion={ddData[0]}
+                    item={selectedItem}
+                />
+            )}
         </main>
     );
 }
