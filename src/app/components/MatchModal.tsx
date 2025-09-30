@@ -232,7 +232,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                   </span>
                 </div>
                 {blueTeam.map((player: Player, index: number) => (
-                  <div key={`blue-${player.playerName}-${index}`} className="bg-black rounded-lg p-3 mb-3 text-sm">
+                  <div key={`blue-${player.playerName}-${index}`} className="bg-black w-full rounded-lg p-3 mb-3 text-sm">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
                         <div className="relative group">
@@ -473,7 +473,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                   </span>
                 </div>
                 {redTeam.map((player: Player, index: number) => (
-                  <div key={`red-${player.playerName}-${index}`} className="bg-black rounded-lg p-3 mb-3 text-sm">
+                  <div key={`red-${player.playerName}-${index}`} className="bg-black w-full rounded-lg p-3 mb-3 text-sm">
                      <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
                         <div className="relative group">

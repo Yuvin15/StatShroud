@@ -247,6 +247,38 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
               </div>
               
             </div>
+            
+            <div className="mt-8 flex flex-col items-center">
+              <h1 className="text-xl font-bold text-yellow-300 text-center mb-2">Player Tips and Tricks</h1>
+              
+              <div className="flex flex-col items-center w-full">
+                <textarea
+                  maxLength={50} 
+                  name="Name" 
+                  id="NameID" 
+                  className="bg-gray-800 rounded-lg w-full p-4 resize-none font-mono mb-4"
+                  placeholder="Who is giving these tips? (Username)">
+                </textarea>
+
+                <textarea 
+                  maxLength={50}
+                  name="LinkTo" 
+                  id="LinkToProfileID" 
+                  className="bg-gray-800 rounded-lg w-full p-4 resize-none font-mono mb-4"
+                  placeholder="Add your social media link here...(Optional)">
+                </textarea>
+
+                <textarea 
+                  maxLength={200}
+                  name="TipsAndTricks" 
+                  id="TipsAndTricksID" 
+                  className="bg-gray-800 rounded-lg w-full p-4 font-mono"
+                  placeholder="Add your tips and tricks here...">
+                </textarea>
+              </div>
+            </div>
+
+
           </>
         )}
 

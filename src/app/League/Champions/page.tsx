@@ -2,10 +2,10 @@
 
 import React from 'react';
 import Image from "next/image";
-import Footer from '../../components/Footer';
 import ChampionDetailsModal from '../../components/ChampionDetailsModal';
 import { useEffect, useState } from "react"; 
-import Navbar from "../../components/navbar";
+import Navbar from "@/app/components/navbar";
+import Footer from "@/app/components/Footer";
 import { useSearchParams } from "next/navigation";
 
 export default function ChampionsPage() {

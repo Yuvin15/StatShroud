@@ -227,7 +227,7 @@ export default function Spinner() {
     setSelectedChampion(null);
     setSelectedRole(null);
 
-    let cycles = 10;
+    let cycles = 3;
     const intervalTime = 1000;
     const interval = setInterval(() => {
       const randomMsg = messages[Math.floor(Math.random() * messages.length)];
