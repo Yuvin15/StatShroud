@@ -49,7 +49,7 @@ const ItemModal = ({ isOpen, onClose, ddVersion, item }: ItemDetailsProps) => {
                             className="rounded-lg mx-auto"
                             unoptimized
                         />
-                        <div className="m-3" dangerouslySetInnerHTML={{ __html: item.itemDetail }} />
+                        <div className="m-3 w-3xs" dangerouslySetInnerHTML={{ __html: item.itemDetail }} />
                         <div>
                             <span className="">Price:</span>
                             <span className="text-yellow-400"> {item.price} gold</span>

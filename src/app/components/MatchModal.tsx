@@ -62,6 +62,7 @@ interface Game {
   gameID: string;
   gameWinner: string;
   gameMode: string;
+  gameTime: string,
   totalBlueKills: number;
   totalRedKills: number;
   totalBlueDragonKills: number;
@@ -166,6 +167,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
           )}
           <p className="text-sm text-gray-400">Game Mode: {GameMode}</p>
           <p className="text-sm text-gray-400">Winner: {GameWinner}</p>
+          <p className="text-sm text-gray-400">Game time: {GameStats?.gameTime}</p>
         </div>
 
         {/* Scoreboard - Only show if we have players data */}
