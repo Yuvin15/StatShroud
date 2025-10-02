@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Image from 'next/image'
-import MatchModal from '../components/MatchModal';
-import ArenaMatchModal from '../components/ArenaMatchModal'; 
-import Footer from '../components/Footer';
-import Navbar from '../components/navbar';
+import MatchModal from '../../components/MatchModal';
+import ArenaMatchModal from '../../components/ArenaMatchModal'; 
+import Footer from '../../components/Footer';
+import Navbar from '../../components/navbar';
 import { useSearchParams } from "next/navigation";
 
 export default function League() {

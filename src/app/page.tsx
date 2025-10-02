@@ -47,8 +47,8 @@ export default function Home() {
     const fetchData = async () => {
       // You need to define gameRegion and matchId or remove them if not used
       // Example values:
-      const gameRegion = "NA";
-      const matchId = "12345";
+      // const gameRegion = "NA";
+      // const matchId = "12345";
       const response = await fetch(
         `https://localhost:44365/Riot/CheckServerStatus`
       );
@@ -92,7 +92,7 @@ export default function Home() {
 
           <div className="flex flex-wrap justify-center gap-4">
             <a
-              href="/League"
+              href="/League/PlayerStats"
               target="_blank"
               className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 transition"
             >

@@ -34,7 +34,7 @@ export default function Navbar() {
               Champions
             </Link>
             <Link
-              href="/League"
+              href="/League/PlayerStats"
               className="text-white hover:bg-[#00558c] px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300"
             >
               Player Stats
@@ -123,7 +123,7 @@ export default function Navbar() {
               Champions
             </Link>
             <Link
-              href="/League"
+              href="/League/PlayerStats"
               className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
               onClick={toggleMenu}
             >
