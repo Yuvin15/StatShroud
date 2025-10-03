@@ -136,7 +136,7 @@ export default function Navbar() {
                 onClick={toggleDropdown}
                 className="w-full text-left text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
               >
-                Coming Soon ▾
+                More ▾
               </button>
               {isDropdownOpen && (
                 <div className="pl-4 mt-1 space-y-1 ">

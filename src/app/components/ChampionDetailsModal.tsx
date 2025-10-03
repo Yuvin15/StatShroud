@@ -42,9 +42,16 @@ interface ChampionDetails {
   champSkins: Skin[];
 }
 
+interface ChampionTips {
+  Author: string;
+  CreatedTime : string;
+  HelpText: string;
+}
+
 const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: ChampionDetailsProps) => {
 
   const [championDetails, setChampionDetails] = useState<ChampionDetails | null>(null);
+  const [championTips, setchampionTips] = useState<ChampionTips[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -66,13 +73,19 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
           `https://localhost:44365/Riot/GetChampionData?championName=${championName}`
         );
 
-        if (!response.ok) throw new Error("Error loading data");
+        const championTipsResponse = await fetch(
+          `https://localhost:44365/Riot/GetChampionHelp/${championName}`
+        );
+
+        if (!response.ok || !championTipsResponse.ok) throw new Error("Error loading data");
 
         const data = await response.json();
+        const championTipsData = await championTipsResponse.json();
         
         if(championDetails == null)
         {
           setChampionDetails(data);
+          setchampionTips(championTipsData);
         }
         
       } catch (err: any) {
@@ -87,6 +100,43 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
   }, [isOpen, championName]);
 
   if (!isOpen) return null;
+
+  async function SubmitTip()
+  {
+    const authorInput = (document.getElementById("NameID") as HTMLInputElement).value;
+    const tipInput = (document.getElementById("TipsAndTricksID") as HTMLInputElement).value;
+
+    if(authorInput.length < 1 || tipInput.length < 1)
+    {
+      alert("Please fill out both fields before submitting.");
+      return;
+    }
+    if(tipInput.length > 200)
+    {
+      alert("Tip is too long, max length is 200 characters.");
+      return;
+    }
+
+    const newTip = {
+      Author: authorInput,
+      helpText: tipInput    
+    }
+
+    const response = await fetch(`https://localhost:44365/Riot/AddChampionHelp?championName=${championName}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTip),
+    });
+
+    if(response.ok)
+    {
+      alert("Tip submitted successfully!");
+      
+    }
+
+  }
 
   return (
     //AI helped here with the onClose on the backdrop
@@ -261,24 +311,38 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
                 </textarea>
 
                 <textarea 
-                  maxLength={50}
-                  name="LinkTo" 
-                  id="LinkToProfileID" 
-                  className="bg-gray-800 rounded-lg w-full p-4 resize-none font-mono mb-4"
-                  placeholder="Add your social media link here...(Optional)">
-                </textarea>
-
-                <textarea 
                   maxLength={200}
                   name="TipsAndTricks" 
                   id="TipsAndTricksID" 
                   className="bg-gray-800 rounded-lg w-full p-4 font-mono"
                   placeholder="Add your tips and tricks here...">
                 </textarea>
+                <button
+                  className="mt-4 bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded"
+                  onClick={SubmitTip}
+                >
+                  Submit Tip
+                </button>
               </div>
             </div>
 
-
+            <div>
+              <div className="mb-2 w-full mt-4">
+                <h3 className="text-xl font-bold text-yellow-300 text-center mb-2">Current Tips for {championDetails?.champName}</h3>
+                {championTips && championTips.length > 0 ? (
+                  <div className="items-center">
+                    {championTips.map((tip, index) => (
+                      <div key={index} className="mb-4 p-4 bg-gray-800 rounded-lg">
+                        <p className="font-bold text-green-600 mb-2">By: {tip.Author}</p>
+                        <p className="">{tip.HelpText}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-sm text-gray-400 text-center">No tips currently. Be the first to add!</div>
+                )}
+              </div>
+            </div>    
           </>
         )}
 
