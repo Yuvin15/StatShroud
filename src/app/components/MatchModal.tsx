@@ -186,6 +186,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
               {/* Blue Side */}
               <div>
                 <h3 className="text-blue-400 text-xl font-semibold mb-2">Blue Team</h3>
+                <h3 className="font-bold underline mb-3">Objectives</h3>
                 <div className="flex space-x-4 mb-4">
                   <Image
                   src='https://raw.communitydragon.org/latest/game/assets/ux/minimap/icons/dragon.png'
@@ -232,6 +233,20 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                   <span className="flex flex-col items-center justify-center">
                     {GameStats?.blueHearldKills}
                   </span>
+                </div>
+                <h3 className="font-bold underline mb-3">Bans</h3>
+                <div className="flex space-x-4 mb-4">
+                  {GameStats?.blueTeamBans.map((champion, index) => (
+                    <Image
+                        src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/${champion}.png`}
+                        width={50}
+                        height={50}
+                        alt={champion}
+                        unoptimized
+                        className="rounded"
+                        title={champion}
+                      />
+                  ))}
                 </div>
                 {blueTeam.map((player: Player, index: number) => (
                   <div key={`blue-${player.playerName}-${index}`} className="bg-black w-full rounded-lg p-3 mb-3 text-sm">
@@ -428,6 +443,7 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
               {/* Red Side */}
               <div>
                 <h3 className="text-red-400 text-xl font-semibold mb-2">Red Team</h3>
+                <h3 className="font-bold underline mb-3">Objectives</h3>
                 <div className="flex space-x-4 mb-4">
                   <Image
                   src='https://raw.communitydragon.org/latest/game/assets/ux/minimap/icons/dragon.png'
@@ -473,6 +489,20 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                   <span className="flex flex-col items-center justify-center">
                     {GameStats?.redHearldKills}
                   </span>
+                </div>
+                <h3 className="font-bold underline mb-3">Bans</h3>
+                <div className="flex flex-row space-x-4 mb-4 ">
+                  {GameStats?.redTeamBans.map((champion, index) => (
+                    <Image
+                        src={`https://ddragon.leagueoflegends.com/cdn/${ddVersion}/img/champion/${champion}.png`}
+                        width={50}
+                        height={50}
+                        alt={champion}
+                        unoptimized
+                        className="rounded"
+                        title={champion}
+                      />
+                  ))}
                 </div>
                 {redTeam.map((player: Player, index: number) => (
                   <div key={`red-${player.playerName}-${index}`} className="bg-black w-full rounded-lg p-3 mb-3 text-sm">
