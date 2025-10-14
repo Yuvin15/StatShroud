@@ -16,7 +16,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0 text-white text-xl font-semibold tracking-wide">
-            MyApp
+            StatsShroud
           </div>
 
           {/* Desktop Navigation */}
@@ -39,7 +39,13 @@ export default function Navbar() {
             >
               Player Stats
             </Link>
-
+            <Link
+              href="/League/Items"
+              className="text-white hover:bg-[#00558c] px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300"
+              onClick={() => setIsDropdownOpen(false)}
+            >
+              Items
+            </Link>
             {/* Dropdown */}
             <div className="relative">
               <button
@@ -52,14 +58,6 @@ export default function Navbar() {
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                   <Link
-                    href="/League/Items"
-                    className="block px-4 py-2 text-black hover:bg-[#00558c] hover:text-white hover:rounded-md"
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    Items
-                  </Link>
-
-                  <Link
                     href="/League/ChampionPicker"
                     className="block px-4 py-2 text-black hover:bg-[#00558c] hover:text-white hover:rounded-md"
                     onClick={() => setIsDropdownOpen(false)}
@@ -68,11 +66,11 @@ export default function Navbar() {
                   </Link>
 
                   <Link
-                    href=""
+                    href="/League/About"
                     className="block px-4 py-2 text-black hover:bg-[#00558c] hover:text-white hover:rounded-md"
                     onClick={() => setIsDropdownOpen(false)}
                   >
-                    Coming Soon
+                    About
                   </Link>
                 </div>
               )}
@@ -129,7 +127,13 @@ export default function Navbar() {
             >
               Player Stats
             </Link>
-
+            <Link
+              href="/League/Items"
+              className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+              onClick={() => setIsDropdownOpen(false)}
+            >
+              Items
+            </Link>
             {/* Mobile dropdown */}
             <div>
               <button
@@ -141,14 +145,6 @@ export default function Navbar() {
               {isDropdownOpen && (
                 <div className="pl-4 mt-1 space-y-1 ">
                   <Link
-                    href="/League/Items"
-                    className="block px-4 py-2 hover:bg-[#00558c] rounded transition-colors duration-200"
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    Items
-                  </Link>
-
-                  <Link
                     href="/League/ChampionPicker"
                     className="block px-4 py-2 hover:bg-[#00558c] rounded transition-colors duration-200"
                     onClick={() => setIsDropdownOpen(false)}
@@ -157,11 +153,11 @@ export default function Navbar() {
                   </Link>
 
                   <Link
-                    href=""
+                    href="/League/About"
                     className="block px-4 py-2 hover:bg-[#00558c] rounded  transition-colors duration-200"
                     onClick={() => setIsDropdownOpen(false)}
                   >
-                    Coming Soon
+                    About
                   </Link>
                 </div>
               )}
