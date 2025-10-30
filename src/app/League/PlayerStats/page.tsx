@@ -7,6 +7,26 @@ import ArenaMatchModal from '../../components/ArenaMatchModal';
 import Footer from '../../components/Footer';
 import Navbar from '../../components/navbar';
 import { useSearchParams } from "next/navigation";
+import IsPlayingModal from "@/app/components/IsPlayingModal";
+
+interface Participant {
+  teamId: string;
+  spell1Id: number;
+  spell2Id: number;
+  championId: string;
+  profileIconId: number;
+  riotId: string;
+  bot: boolean;
+}
+
+interface LiveGame {
+  GameID: string;
+  MapID: string;
+  gameMode: string;
+  gameType: string;
+  gameQueueConfigId: string;
+  participants: Participant[];
+}
 
 export default function League() {
   
@@ -26,10 +46,16 @@ export default function League() {
   const [matchHistory, setMatchHistory] = useState([]);
   const [hasPlayerData, setHasPlayerData] = useState(false);
 
+  const [isPlaying, setHasPlaying] = useState(false);
+  const [IsPlayingData, setisPlayingData] = useState<LiveGame | null>(null);
+
   const [topPlayed, setTopPlayed] = useState<any[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isArenaModalOpen, setArenaIsModalOpen] = useState(false);
+
+  const [isPlayingLiveModal, setisPlayingModalOpen] = useState(false);
+
   const [selectedMatchId, setSelectedMatchId] = useState<string>('');
 
   const [hasSubmitted, setHasSubmitted] = useState(true);
@@ -91,6 +117,32 @@ export default function League() {
 
       const response = await fetch(`https://localhost:44365/Riot/GetAccount?gameName=${inputGameName}&tagLine=${tagLine}&region=${apiRegion}`);
       const topPlayedResponse = await fetch(`https://localhost:44365/Riot/GetTopPlayed?gameName=${inputGameName}&tagLine=${tagLine}&region=${apiRegion}`);
+      
+      const isPlayingResponse = await fetch(`https://localhost:44365/Riot/IsPlayerInGame?gameName=${inputGameName}&tagLine=${tagLine}&region=${apiRegion}`);
+
+      if (isPlayingResponse.status === 204) 
+      {
+        setHasPlaying(false);
+        setisPlayingData(null);
+      } else if (isPlayingResponse.ok) 
+      {
+        try {
+          const isPlayingData = await isPlayingResponse.json();
+          setHasPlaying(true);
+          setisPlayingData(isPlayingData);
+          console.log(isPlayingData);
+        } catch (error) {
+          // Handle case where response isn't valid JSON
+          console.error('Failed to parse live game data:', error);
+          setHasPlaying(false);
+          setisPlayingData(null);
+        }
+      } else 
+      {
+        setHasPlaying(false);
+        setisPlayingData(null);
+      }
+
       if (!response.ok && !topPlayedResponse.ok) {
         throw new Error('Stats not found');
       }
@@ -119,15 +171,20 @@ export default function League() {
     }
   };
 
-
   const openModal = (matchID: string, gameMode: string) => {
-    if(gameMode === 'Arena') {
+    if(gameMode === 'Arena') 
+    {
       setSelectedMatchId(matchID);
       setArenaIsModalOpen(true);
-    } else {
+    } else if(gameMode === 'LiveGame') 
+    {
+      setisPlayingModalOpen(true);
+    } else
+    {
       setSelectedMatchId(matchID);
       setIsModalOpen(true);
     }
+      
   };
 
   const closeModal = () => {
@@ -231,7 +288,21 @@ export default function League() {
                     <span className="font-bold" id="FlexqID">Ranked Flex Queue:</span> {flexRank}
                   </p>
                 </div>
+              
+                <div
+                  className="flex items-center space-x-2 font-black m-3 cursor-pointer"
+                  onClick={() => openModal("InGame", 'LiveGame')}
+                >
+                  {isPlaying && (
+                    <div className="flex items-center gap-2 bg-green-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow-md">
+                      <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></span>
+                      <span>Player is currently in a live game (Click to view)</span>
+                    </div>
+                  )}
+                </div>
 
+             
+                
                 <div className="p-4 font-black">
                   <h1>Top Played</h1>
                   <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center justify-center w-full max-w-2xl">
@@ -354,6 +425,15 @@ export default function League() {
             onClose={closeModal}
             gameRegion={selectedRegion}
             ddVersion={ddData}
+          />
+        )}
+
+        {/* Render the modal */}
+        {isPlayingLiveModal && (
+          <IsPlayingModal
+            open={isPlayingLiveModal}
+            onClose={() => setisPlayingModalOpen(false)}
+            liveGameData={IsPlayingData!}
           />
         )}
       </main>

@@ -49,9 +49,9 @@ export default function AboutPage() {
             <h1 className="font-bold text-3xl">About Page</h1>
             <section>
                 <p>
-                    Welcome to the League! Our mission is to bring together gamers and enthusiasts
-                    to compete, collaborate, and grow as a community. Whether you're a seasoned
-                    player or just starting out, there's a place for you here.
+                    StatsShroud was created as a personal project to enhance my skills in Next.js and React. 
+                    The goal was to develop a straightforward platform that provides users with essential information about players, champions, and items in League of Legends. By focusing on simplicity and usability, 
+                    I aimed to create an accessible resource for players seeking quick insights without overwhelming details. Here are some frequently asked questions about the site.
                 </p>
             </section>
             <section className="mt-8 text-center">

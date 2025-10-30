@@ -59,7 +59,7 @@ export default function Navbar() {
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                   <Link
                     href="/League/ChampionPicker"
-                    className="block px-4 py-2 text-black hover:bg-[#00558c] hover:text-white hover:rounded-md"
+                    className="block px-4 py-2 text-black hover:bg-[#00558c] hover:text-white hover:rounded-md transition-colors duration-300"
                     onClick={() => setIsDropdownOpen(false)}
                   >
                     Random champion picker
@@ -67,7 +67,7 @@ export default function Navbar() {
 
                   <Link
                     href="/League/About"
-                    className="block px-4 py-2 text-black hover:bg-[#00558c] hover:text-white hover:rounded-md"
+                    className="block px-4 py-2 text-black hover:bg-[#00558c] hover:text-white hover:rounded-md transition-colors duration-300"
                     onClick={() => setIsDropdownOpen(false)}
                   >
                     About
@@ -81,7 +81,7 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
-              className="text-white hover:text-gray-300 transition-colors duration-200 focus:outline-none"
+              className="text-white hover:text-gray-300 transition-colors duration-300 focus:outline-none"
               aria-label="Toggle menu"
             >
               <svg
@@ -108,28 +108,28 @@ export default function Navbar() {
           <div className="md:hidden mt-2 max-h-[calc(100vh-4rem)] overflow-y-auto px-2 pt-2 pb-3 space-y-1 bg-[#04141f] rounded-2xl">
             <Link
               href="/"
-              className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+              className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-300"
               onClick={toggleMenu}
             >
               Home
             </Link>
             <Link
               href="/League/Champions"
-              className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+              className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-300"
               onClick={toggleMenu}
             >
               Champions
             </Link>
             <Link
               href="/League/PlayerStats"
-              className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+              className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-300"
               onClick={toggleMenu}
             >
               Player Stats
             </Link>
             <Link
               href="/League/Items"
-              className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+              className="block text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-300"
               onClick={() => setIsDropdownOpen(false)}
             >
               Items
@@ -138,7 +138,7 @@ export default function Navbar() {
             <div>
               <button
                 onClick={toggleDropdown}
-                className="w-full text-left text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                className="w-full text-left text-white hover:bg-[#00558c] px-3 py-2 rounded-md text-base font-medium transition-colors duration-300"
               >
                 More ▾
               </button>
@@ -146,7 +146,7 @@ export default function Navbar() {
                 <div className="pl-4 mt-1 space-y-1 ">
                   <Link
                     href="/League/ChampionPicker"
-                    className="block px-4 py-2 hover:bg-[#00558c] rounded transition-colors duration-200"
+                    className="block px-4 py-2 hover:bg-[#00558c] rounded transition-colors duration-300"
                     onClick={() => setIsDropdownOpen(false)}
                   >
                     Random champion picker
@@ -154,7 +154,7 @@ export default function Navbar() {
 
                   <Link
                     href="/League/About"
-                    className="block px-4 py-2 hover:bg-[#00558c] rounded  transition-colors duration-200"
+                    className="block px-4 py-2 hover:bg-[#00558c] rounded  transition-colors duration-300"
                     onClick={() => setIsDropdownOpen(false)}
                   >
                     About
