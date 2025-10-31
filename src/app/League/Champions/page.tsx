@@ -260,6 +260,7 @@ const champions = [
                                     xmlns="http://www.w3.org/2000/svg" 
                                     className="w-6 h-6 absolute top-2 right-2"
                                     stroke="#ffc800" transform="matrix(-1, 0, 0, 1, 0, 0)rotate(0)">
+                                        <title>Free to play</title>
                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                         <g id="SVGRepo_tracerCarrier" strokeLinecap="round" stroke-linejoin="round" stroke="#CCCCCC" strokeWidth="0.144"></g>
                                         <g id="SVGRepo_iconCarrier"> 

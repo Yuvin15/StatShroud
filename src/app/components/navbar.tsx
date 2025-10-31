@@ -16,7 +16,9 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0 text-white text-xl font-semibold tracking-wide">
-            StatsShroud
+            <a href="/">
+              StatsShroud
+            </a>
           </div>
 
           {/* Desktop Navigation */}
@@ -56,10 +58,10 @@ export default function Navbar() {
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+                <div className="absolute right-0 mt-2 w-48 bg-[#04141f] text-white rounded-md shadow-lg z-50">
                   <Link
                     href="/League/ChampionPicker"
-                    className="block px-4 py-2 text-black hover:bg-[#00558c] hover:text-white hover:rounded-md transition-colors duration-300"
+                    className="block px-4 py-2 hover:bg-[#00558c] hover:rounded-md transition-colors duration-300"
                     onClick={() => setIsDropdownOpen(false)}
                   >
                     Random champion picker
@@ -67,7 +69,7 @@ export default function Navbar() {
 
                   <Link
                     href="/League/About"
-                    className="block px-4 py-2 text-black hover:bg-[#00558c] hover:text-white hover:rounded-md transition-colors duration-300"
+                    className="block px-4 py-2 hover:bg-[#00558c] hover:text-white hover:rounded-md transition-colors duration-300"
                     onClick={() => setIsDropdownOpen(false)}
                   >
                     About

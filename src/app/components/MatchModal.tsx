@@ -335,6 +335,16 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                             alt="Keystone"
                             unoptimized
                             className="rounded border"
+                            title=
+                            {
+                              player.summonerSpell1 === "SummonerDot"
+                              ? "Ignite"
+                              : player.summonerSpell1 === "SummonerHaste"
+                              ? "Ghost"
+                              : player.summonerSpell1 === "SummonerBoost"
+                              ? "Cleanse"
+                              : player.summonerSpell1.replace("Summoner", "")
+                            }
                           />
                           <Image
                             src={`https://ddragon.leagueoflegends.com/cdn/15.15.1/img/spell/${player.summonerSpell2}.png`}
@@ -343,6 +353,16 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                             alt="Keystone"
                             unoptimized
                             className="rounded border"
+                            title=
+                            {
+                              player.summonerSpell2 === "SummonerDot"
+                              ? "Ignite"
+                              : player.summonerSpell2 === "SummonerHaste"
+                              ? "Ghost"
+                              : player.summonerSpell2 === "SummonerBoost"
+                              ? "Cleanse"
+                              : player.summonerSpell2.replace("Summoner", "")
+                            }
                           />
                         </div>
                         
@@ -368,8 +388,8 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                               height={24}
                               alt="Keystone"
                               unoptimized
-                              className="rounded border"
-                              title={player.runes.keyStone.substring(player.runes.keyStone.indexOf("perk") + 5, player.runes.keyStone.lastIndexOf("/"))}
+                              className="rounded border hover:cursor-help"
+                              title={player.runes.keyStone.split("/").pop()?.replace(".png", "") || ""}
                             />
                             {[player.runes.primaryRune1, player.runes.primaryRune2, player.runes.primaryRune3].map((rune, runeIndex) => (
                               <Image
@@ -379,8 +399,8 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                                 height={20}
                                 alt="Primary Rune"
                                 unoptimized
-                                className="rounded"
-                                title={rune.substring(rune.indexOf("perk") + 5, rune.lastIndexOf("/"))}
+                                className="rounded hover:cursor-help"
+                                title={rune.split("/").pop()?.replace(".png", "") || ""}
                               />
                             ))}
                             {/* Secondary Runes */}
@@ -392,8 +412,8 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                                 height={20}
                                 alt="Secondary Rune"
                                 unoptimized
-                                className="rounded"
-                                title={rune.substring(rune.indexOf("perk") + 5, rune.lastIndexOf("/"))}
+                                className="rounded hover:cursor-help"
+                                title={rune.split("/").pop()?.replace(".png", "") || ""}
                               />
                             ))}
                           </div>
@@ -591,6 +611,16 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                             alt="Keystone"
                             unoptimized
                             className="rounded border"
+                            title=
+                            {
+                              player.summonerSpell1 === "SummonerDot"
+                              ? "Ignite"
+                              : player.summonerSpell1 === "SummonerHaste"
+                              ? "Ghost"
+                              : player.summonerSpell1 === "SummonerBoost"
+                              ? "Cleanse"
+                              : player.summonerSpell1.replace("Summoner", "")
+                            }
                           />
                           <Image
                             src={`https://ddragon.leagueoflegends.com/cdn/15.15.1/img/spell/${player.summonerSpell2}.png`}
@@ -599,6 +629,16 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                             alt="Keystone"
                             unoptimized
                             className="rounded border"
+                            title=
+                            {
+                              player.summonerSpell2 === "SummonerDot"
+                              ? "Ignite"
+                              : player.summonerSpell2 === "SummonerHaste"
+                              ? "Ghost"
+                              : player.summonerSpell2 === "SummonerBoost"
+                              ? "Cleanse"
+                              : player.summonerSpell2.replace("Summoner", "")
+                            }
                           />
                         </div>
                       </div>
@@ -625,8 +665,8 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                               height={24}
                               alt="Keystone"
                               unoptimized
-                              className="rounded border"
-                              title={player.runes.keyStone.substring(player.runes.keyStone.indexOf("perk") + 5, player.runes.keyStone.lastIndexOf("/"))}
+                              className="rounded border hover:cursor-help"
+                              title={player.runes.keyStone.split("/").pop()?.replace(".png", "") || ""}
                             />
                             {/* Primary Runes */}
                             {[player.runes.primaryRune1, player.runes.primaryRune2, player.runes.primaryRune3].map((rune, runeIndex) => (
@@ -637,8 +677,8 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                                 height={20}
                                 alt="Primary Rune"
                                 unoptimized
-                                className="rounded"
-                                title={rune.substring(rune.indexOf("perk") + 5, rune.lastIndexOf("/"))}
+                                className="rounded hover:cursor-help"
+                                title={rune.split("/").pop()?.replace(".png", "") || ""}
                               />
                             ))}
                             {/* Secondary Runes */}
@@ -650,8 +690,8 @@ const MatchModal = ({ isOpen, onClose, matchId, gameRegion, ddVersion }: MatchMo
                                 height={20}
                                 alt="Secondary Rune"
                                 unoptimized
-                                className="rounded"
-                                title={rune.substring(rune.indexOf("perk") + 5, rune.lastIndexOf("/"))}
+                                className="rounded hover:cursor-help"
+                                title={rune.split("/").pop()?.replace(".png", "") || ""}
                               />
                             ))}
                           </div>
