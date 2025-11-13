@@ -8,6 +8,7 @@ import Footer from '../../components/Footer';
 import Navbar from '../../components/navbar';
 import { useSearchParams } from "next/navigation";
 import IsPlayingModal from "@/app/components/IsPlayingModal";
+import { spawn } from "child_process";
 
 interface Participant {
   teamId: string;
@@ -28,6 +29,13 @@ interface LiveGame {
   participants: Participant[];
 }
 
+interface PlayerExtra{
+  streak: string;
+  farmPer10: string;
+  playerSurvivability: string;
+  otpStatus:string;
+}
+
 export default function League() {
   
   const searchParams = useSearchParams();
@@ -46,6 +54,9 @@ export default function League() {
   const [matchHistory, setMatchHistory] = useState([]);
   const [hasPlayerData, setHasPlayerData] = useState(false);
 
+  const [ChampionWR, setChampionWR] = useState<Record<string, number> | null>(null);
+  const [PlayerExta, setPlayerExtra] = useState<PlayerExtra>();
+
   const [isPlaying, setHasPlaying] = useState(false);
   const [IsPlayingData, setisPlayingData] = useState<LiveGame | null>(null);
 
@@ -59,6 +70,8 @@ export default function League() {
   const [selectedMatchId, setSelectedMatchId] = useState<string>('');
 
   const [hasSubmitted, setHasSubmitted] = useState(true);
+
+   const [selectedView, setSelectedView] = useState("");
 
   useEffect(() => {
     const playerName = searchParams.get("playerName");
@@ -156,10 +169,9 @@ export default function League() {
       setFlexRank(data.flexRank);
       setMatchHistory(data.basicMatchDetails);
       setddVersion(ddData[0]);
-      
       setTopPlayed(topPlayedData);
-      console.log(topPlayed);
-
+      setChampionWR(data.recentGamesWinRate);
+      setPlayerExtra(data.achievments)
       setHasPlayerData(true);
 
     } catch (err) {
@@ -289,8 +301,28 @@ export default function League() {
                   </p>
                 </div>
               
+                <div className="p-4 font-black">
+                  <h1>Additional Stats</h1>
+                  {PlayerExta && (
+                    <div className="mt-3 flex flex-wrap gap-3 justify-center">
+                    <span className="text-white px-4 py-2 font-semibold rounded-lg border border-white">
+                      {PlayerExta.farmPer10}
+                    </span>
+                    <span className="text-white px-4 py-2 font-semibold rounded-lg border border-white">
+                      {PlayerExta.otpStatus}
+                    </span>
+                    <span className="text-white px-4 py-2 font-semibold rounded-lg border border-white">
+                      {PlayerExta.playerSurvivability}
+                    </span>
+                    <span className="text-white px-4 py-2 font-semibold rounded-lg border border-white">
+                      {PlayerExta.streak}
+                    </span>
+                  </div>
+                  )}
+                </div>
+
                 <div
-                  className="flex items-center space-x-2 font-black m-3 cursor-pointer"
+                  className="flex items-center space-x-2 font-black mt-3 cursor-pointer"
                   onClick={() => openModal("InGame", 'LiveGame')}
                 >
                   {isPlaying && (
@@ -300,10 +332,52 @@ export default function League() {
                     </div>
                   )}
                 </div>
-
-             
                 
                 <div className="p-4 font-black">
+                  <h1>Click below to view more</h1>
+                </div>
+                <div className="flex gap-6 mb-4">
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      id="topPlayed"
+                      name="myRadioGroup"
+                      value="topPlayed"
+                      checked={selectedView === "topPlayed"}
+                      onChange={() => setSelectedView("topPlayed")}
+                      className="hidden peer"
+                    />
+                    <label htmlFor="topPlayed" className="peer-checked:bg-yellow-400 peer-checked:text-black px-4 py-2 rounded-lg border transition-colors duration-300">View top played characters</label>
+                  </div>
+
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      id="recentlyPlayed"
+                      name="myRadioGroup"
+                      value="recentlyPlayed"
+                      checked={selectedView === "recentlyPlayed"}
+                      onChange={() => setSelectedView("recentlyPlayed")}
+                      className="hidden peer"
+                    />
+                    <label htmlFor="recentlyPlayed" className="peer-checked:bg-yellow-400 peer-checked:text-black px-4 py-2 rounded-lg border transition-colors duration-300">View recently played characters</label>
+                  </div>
+
+                  <div className="flex items-center">
+                    <input
+                      type="radio"
+                      id="achievements"
+                      name="myRadioGroup"
+                      value="achievements"
+                      checked={selectedView === "achievements"}
+                      onChange={() => setSelectedView("achievements")}
+                      className="hidden peer"
+                    />
+                    <label htmlFor="achievements" className="peer-checked:bg-yellow-400 peer-checked:text-black px-4 py-2 rounded-lg border transition-colors duration-300">View Challenges</label>
+                  </div>
+                </div>  
+
+                <div className={selectedView === "topPlayed" ? "block p-4 font-black" : "hidden p-4 font-black"} id="TopPlayedSection">
                   <h1>Top Played</h1>
                   <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center justify-center w-full max-w-2xl">
                     <span>
@@ -344,17 +418,48 @@ export default function League() {
                     </span>
                   </div>
                 </div>
+                
+                <div className={selectedView === "recentlyPlayed" ? "block p-4 font-black" : "hidden p-4 font-black"} id="RecentlyPlayedSection">
+                  <h1 className="mb-4">Recently Played</h1>
+                  <div className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-10 gap-6">
+                    {ChampionWR &&
+                      Object.entries(ChampionWR).map(
+                        ([championName, winrate]: [string, number], index: number) => (
+                          <div
+                            key={index}
+                            className="flex flex-col justify-center"
+                          >
+                            <Image
+                              src={`https://ddragon.leagueoflegends.com/cdn/${ddData}/img/champion/${championName}.png`}
+                              width={64}
+                              height={64}
+                              unoptimized
+                              alt={championName}
+                              className="rounded-lg"
+                              title={championName}
+                            />
+                            <span className="text-sm mt-2">{championName}</span>
+                            <span className="text-xs text-gray-400">Win rate: {winrate}%</span>
+                          </div>
+                        )
+                      )}
+                  </div>
+                </div>
+                
+                <div className={selectedView === "achievements" ? "block p-4 font-black" : "hidden p-4 font-black"} id="AchievementsSection">
+                  <h1 className="mb-4">Challenges</h1>
+                </div>
 
               </div>
 
               <div className="p-4">
                 <p className="font-black text-center mb-4">Last 20 Games</p>
 
-                <div className="space-y-4">
+                <div className="space-y-4 ">
                   {matchHistory.map((match: any, index: number) => (
                     <div
                       key={index}
-                      className={`flex flex-col sm:flex-row items-center sm:justify-between text-white p-4 ${
+                      className={`flex flex-col sm:flex-row items-center sm:justify-between text-white p-4 rounded-2xl ${
                         match.gameWinner === 'Victory' ? 'bg-[#25b8f7]' : 'bg-[#b80000]'
                       }`}
                     >
