@@ -40,6 +40,28 @@ interface ChampionDetails {
   championLore: string;
 
   champSkins: Skin[];
+
+  hp: number;
+  hpPerLevel: number;
+  mp: number;
+  mpPerLevel: number;
+  moveSpeed: number;
+  armor: number;
+  armorPerLevel: number;
+  spellBlock: number;
+  spellBlockPerLevel: number;
+  attackRange: number;
+  hpRegen: number;
+  hpRegenPerLevel: number;
+  mpRegen: number;
+  mpRegenPerLevel: number;
+  crit: number;
+  critPerLevel: number;
+  attackDamage: number;
+  attackDamagePerLevel: number;
+  attackSpeedPerLevel: number;
+  attackSpeed: number;
+
 }
 
 interface ChampionTips {
@@ -183,6 +205,46 @@ const ChampionDetailsModal = ({ isOpen, onClose, ddVersion, championName }: Cham
               />
               <div className="text-bold" dangerouslySetInnerHTML={{ __html: championDetails.championLore }} />
             </div>
+
+            <div className="flex items-center justify-center gap-2 mb-2 relative group">
+              <h1 className="text-xl md:text-2xl font-bold text-yellow-300">
+                Abilities
+              </h1>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                strokeWidth={1.5} 
+                stroke="currentColor" 
+                className="size-6 align-middle"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" 
+                />
+              </svg>
+              <div className="relative group">
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-4 py-3 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none border border-white text-center min-w-max">
+                  <div className="font-bold text-yellow-300 space-y-1">
+                    {[
+                      { label: "Base HP", value: championDetails.hp },
+                      { label: "Base Mana", value: championDetails.mp },
+                      { label: "Move Speed", value: championDetails.moveSpeed },
+                      { label: "Base Armor", value: championDetails.armor },
+                      { label: "Attack Range", value: championDetails.attackRange },
+                      { label: "Base Attack Damage", value: championDetails.attackDamage },
+                      { label: "Base Attack Speed", value: championDetails.attackSpeed },
+                    ].map((stat, index) => (
+                      <p key={index}>
+                        <span className="text-white">{stat.label}:</span> {stat.value}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
 
             {/* Abilities Section */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 justify-center text-center">
